@@ -1,40 +1,16 @@
-name: Build and deploy
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+on: push
+name: 🚀 Deploy website on push
 jobs:
-  build:
-    name: Build ⛏
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@main
-      - name: Install dependencies
-        run: npm ci
-      - name: Build dependencies
-        run: npm run build
-      - name: Archive production artifact
-        uses: actions/upload-artifact@main
-        with:
-          name: dist
-          path: dist
-  deploy:
-    name: Deploy 🚀
-    needs: build
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout repository
-        uses: actions/checkout@main
-      - name: Download artifact
-        uses: actions/download-artifact@main
-        with: 
-          name: dist
-          path: dist
-      - name: Sync files to hosting
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
-        with: 
-          ftp-server: ${{ secrets. FTP_SERVER }}
-          ftp-username: ${{ secrets. FTP_USERNAME }}
-          ftp-password: ${{ secrets. FTP_PASSWORD }}
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        ftp-server: ${{ secrets. FTP_SERVER }}
+        ftp-username: ${{ secrets. FTP_USERNAME }}
+        ftp-password: ${{ secrets. FTP_PASSWORD }}
