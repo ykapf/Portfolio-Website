@@ -33,10 +33,10 @@ jobs:
           name: dist
           path: dist
       - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets. FTP_SERVER }}
-        username: ${{ secrets. FTP_USERNAME }}
-        password: ${{ secrets. FTP_PASSWORD }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets. FTP_SERVER }}
+          username: ${{ secrets. FTP_USERNAME }}
+          password: ${{ secrets. FTP_PASSWORD }}
 
    
