@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const videoId = "xNRJwmlRBNU";
+const videoId = "videoseries?list=PLRH7Kv1Vr04TF6cUlx6f-_Vgn3UIVyZFh";
 
 export default function Home() {
   const videoSrc = `https://www.youtube.com/embed/${videoId}`;
@@ -29,9 +29,9 @@ export default function Home() {
           <div className="flex flex-col justify-center items-center w-full h-full p-4 ">
             <div className="w-full h-full flex justify-center items-center ">
               <iframe
-                className=" h-full border-0 aspect-video"
+                className=" w-full h-fit md:w-fit md:h-full border-0 aspect-video"
                 src={videoSrc}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
             </div>
