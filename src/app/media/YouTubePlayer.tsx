@@ -14,7 +14,7 @@ const YouTubePlayer: React.FC = () => {
       let newVideoId;
 
       // Ensure that the URL is a YouTube URL
-      if (url.hostname === "www.youtube.com" || url.hostname === "youtube.com") {
+      if (url.hostname === "www.youtube.com" || url.hostname === "youtube.com" || url.hostname === "m.youtube.com") {
         const vParam = url.searchParams.get("v");
         const listParam = url.searchParams.get("list");
 
