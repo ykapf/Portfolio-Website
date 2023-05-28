@@ -1,6 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+// helper function for debouncing
+const debounce = (fn: (...args: any[]) => void, ms: number) => {
+  let timer: NodeJS.Timeout | null;
+  return (...args: any[]) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      timer = null;
+      fn.apply(this, args);
+    }, ms);
+  };
+};
 
 const YouTubePlayer: React.FC = () => {
   const defaultVideoId = "videoseries?list=PLRH7Kv1Vr04TF6cUlx6f-_Vgn3UIVyZFh";
@@ -8,9 +22,21 @@ const YouTubePlayer: React.FC = () => {
     `https://www.youtube.com/embed/${defaultVideoId}&loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white`
   );
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [inputValue, setInputValue] = useState("");
+  const debouncedChange = useRef(debounce(handleInputChange, 1250));
+
+  useEffect(() => {
+    debouncedChange.current(inputValue);
+  }, [inputValue]);
+
+  function handleInputChange(urlString: string) {
+    // if urlString is empty, don't do anything
+    if (!urlString.trim()) {
+      return;
+    }
+
     try {
-      const url = new URL(event.target.value);
+      const url = new URL(urlString);
       let newVideoId;
 
       // Ensure that the URL is a YouTube URL
@@ -49,7 +75,7 @@ const YouTubePlayer: React.FC = () => {
         alert("An unknown error occurred");
       }
     }
-  };
+  }
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -63,7 +89,8 @@ const YouTubePlayer: React.FC = () => {
         type="text"
         placeholder="Paste a URL to a YouTube video or playlist"
         className="my-7 p-2 border border-gray-300 dark:bg-black opacity-25 hover:opacity-50 delay-75 duration-300 w-full md:w-1/2"
-        onChange={handleInputChange}
+        onChange={(e) => setInputValue(e.target.value)}
+        onClick={(e) => e.currentTarget.select()}
       />
     </div>
   );
