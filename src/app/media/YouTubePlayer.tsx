@@ -19,16 +19,17 @@ const YouTubePlayer: React.FC = () => {
         const listParam = url.searchParams.get("list");
 
         if (vParam && listParam) {
-          newVideoId = `${vParam}?list=${listParam}&loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white`;
+          newVideoId = `${vParam}?list=${listParam}&loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white&autoplay=1`;
         } else if (vParam) {
-          newVideoId = `${vParam}?loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white`;
+          newVideoId = `${vParam}?loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white&autoplay=1`;
         } else if (listParam) {
-          newVideoId = `videoseries?list=${listParam}&loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white`;
+          newVideoId = `videoseries?list=${listParam}&loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white&autoplay=1`;
         } else {
           throw new Error("URL does not contain a video or playlist ID");
         }
       } else if (url.hostname === "youtu.be") {
         newVideoId = url.pathname.slice(1); // remove the leading "/"
+        newVideoId = `${newVideoId}?loop=1&iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white&autoplay=1`;
       } else {
         throw new Error("URL is not a YouTube URL");
       }
