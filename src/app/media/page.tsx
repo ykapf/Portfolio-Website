@@ -26,7 +26,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="my-28 w-full h-full">
+        <div className="my-28 w-full h-2/3 md:h-full">
           <div className="flex flex-col justify-center items-center w-full h-full p-4 ">
             <div className="w-full h-full flex justify-center items-center ">
               <YouTubePlayer />
