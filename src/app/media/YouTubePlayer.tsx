@@ -61,7 +61,7 @@ const YouTubePlayer: React.FC = () => {
       />
       <input
         type="text"
-        placeholder="Enter YouTube video or playlist URL"
+        placeholder="Paste a URL to a YouTube video or playlist"
         className="my-7 p-2 border border-gray-300 dark:bg-black opacity-25 hover:opacity-50 delay-75 duration-300 w-full md:w-1/2"
         onChange={handleInputChange}
       />
