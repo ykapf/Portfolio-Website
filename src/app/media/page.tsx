@@ -4,8 +4,6 @@ import YouTubePlayer from "./YouTubePlayer";
 const videoId = "videoseries?list=PLRH7Kv1Vr04TF6cUlx6f-_Vgn3UIVyZFh";
 
 export default function Home() {
-  const videoSrc = `https://www.youtube.com/embed/${videoId}&loop=1&iv_load_policy=3&color=white&controls=1&modestbranding=1&playsinline=1`;
-
   return (
     <>
       <div className="flex flex-col w-screen h-screen justify-center items-center overflow-y-auto overflow-x-hidden ">
