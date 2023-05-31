@@ -30,7 +30,7 @@ export default function Home() {
           <h2 className={`mb-3 text-2xl font-semibold`}>
             Repos <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">-&gt;</span>
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>View any GitHub user's repositories and account details using GitHub&apos;s API.</p>
+          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>View any GitHub user&apos;s repositories and account details using GitHub&apos;s API.</p>
         </a>
 
         <a
