@@ -46,7 +46,7 @@ export default function Footer() {
           Loading time...
         </div>
         {/* Middle */}
-        <Link className="   text-white cursor-none" href="/">
+        <Link className="   text-white cursor-none hover:underline " href="/">
           @ykapf.
         </Link>
       </nav>
