@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -27,13 +28,16 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex min-h-screen  flex-col    bg-[#EBE5D2] dark:bg-[#492201] -z-50">
+    // sm:dark:bg-yellow-500 md:dark:bg-red-500 lg:dark:bg-blue-500 xl:dark:bg-green-500 2xl:dark:bg-yellow-500
+    <main className="flex min-h-screen  flex-col    bg-[#EBE5D2] dark:bg-[#492201]  -z-50">
       {/* <Navbar /> */}
-      <div className="w-full h-full  flex flex-col items-center justify-center      px-[75px] pt-[75px] min-h-screen ">
-        <div className="kaftanFont   absolute top-[50px] left-50 flex items-center justify-center  text-[400px] text-[#ffffff] dark:text-[#633200] transform scale-y-125 blur-[6px]">
+      <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px] min-h-screen ">
+        <div
+          className={`kaftanFont   absolute top-[50px] left-50 flex items-center justify-center  text-[400px]  text-[#ffffff] dark:text-[#633200] transform scale-y-125 blur-[6px]`}
+        >
           portfolio
         </div>
-        <div className="kaftanFont   flex items-center justify-center  text-[150px]  lowercase text-[#0000FE] z-10 ">Yusuf Kaplan.</div>
+        <div className={` kaftanFont   flex items-center justify-center  text-[150px]  lowercase text-[#0000FE] dark:text-[#ffdb9c] z-10 `}>Yusuf Kaplan.</div>
 
         {/* <div className=" mb-2 text-2xl opacity-50 font-bold  text-center">
           Welcome to my Portfolio
@@ -47,7 +51,7 @@ export default function Home() {
             className={`group rounded-md border border-transparent px-5 py-4 transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-300/20 delay-50 `}
           >
             <h2 className="mb-[6px] text-2xl font-base  text-[#fe8f50] uppercase   transform scale-y-[1.1]">
-              {title}{" "}
+              {title}
               <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none duration-500 transform scale-y-[0.7]">
                 -&gt;
               </span>
