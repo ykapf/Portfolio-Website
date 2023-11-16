@@ -37,7 +37,7 @@ const YouTubePlayer: React.FC = () => {
 
     try {
       const url = new URL(urlString);
-      let newVideoId;
+      let newVideoId: string | null = null;
 
       // Ensure that the URL is a YouTube URL
       if (url.hostname === "www.youtube.com" || url.hostname === "youtube.com" || url.hostname === "m.youtube.com") {
@@ -78,9 +78,9 @@ const YouTubePlayer: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-full h-full flex flex-col items-center ">
       <iframe
-        className="w-full h-fit md:w-fit md:h-full border-0 aspect-video"
+        className="w-full h-fit md:w-fit md:h-full border-0 aspect-video "
         src={videoSrc}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen

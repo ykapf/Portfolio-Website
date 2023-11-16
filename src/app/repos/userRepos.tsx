@@ -70,7 +70,7 @@ function UserRepos() {
 
           <button
             type="submit"
-            className="ml-3 p-2 px-4 border text-white border-blue-700 bg-blue-700 hover:border-blue-800 hover:bg-blue-800 delay-75 duration-300 w-fit rounded-md"
+            className="ml-3 p-2 px-4 border text-white border-blue-700 bg-blue-700 hover:border-blue-800 hover:bg-blue-800 delay-75 duration-300 w-fit rounded-md cursor-none"
           >
             Search
           </button>
