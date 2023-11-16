@@ -1,9 +1,10 @@
 import Image from "next/image";
 import UserRepos from "./userRepos";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center  p-24">
+    <main className="flex min-h-screen flex-col items-center  p-24  bg-black">
       <div className="px-4 py-8 fixed w-full z-20 top-0 left-0 ">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
           <a href="/" className="flex group rounded-lg px-5 ">
