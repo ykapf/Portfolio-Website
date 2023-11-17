@@ -42,8 +42,6 @@ body {
 }
 
 ::selection {
-  /* Change highlight background color to black */
   background: #f0a4007a;
-  /* Change highlight text color to red */
   color: #111;
 }

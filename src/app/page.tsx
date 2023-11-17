@@ -31,6 +31,7 @@ export default function Home() {
     // sm:dark:bg-yellow-500 md:dark:bg-red-500 lg:dark:bg-blue-500 xl:dark:bg-green-500 2xl:dark:bg-yellow-500
     <main className="flex min-h-screen  flex-col    bg-[#EBE5D2] dark:bg-[#492201]  -z-50">
       {/* <Navbar /> */}
+
       <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px] min-h-screen ">
         <div
           className={`kaftanFont   absolute top-[50px] left-50 flex items-center justify-center  text-[400px]  text-[#ffffff] dark:text-[#633200] transform scale-y-125 blur-[6px]`}
@@ -60,6 +61,7 @@ export default function Home() {
           </a>
         ))}
       </div>
+
       <Footer />
     </main>
   );

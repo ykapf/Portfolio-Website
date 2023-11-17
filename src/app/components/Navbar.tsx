@@ -7,17 +7,26 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <>
-      <nav
-        className={`w-full flex flex-row justify-between items-center py-[28px] font-medium text-3xl  cursor-default    bg-black h-[300px]
+      <div className="w-fit flex flex-col px-[28px]">
+        <nav
+          className={`w-fit flex flex-row justify-start items-center  p-[28px] pb-[14px] font-medium text-3xl  z-50 gap-7 text-[#0000FE] dark:text-[#ffdb9c]
         `}
-      >
-        {/* Navbar content */}
-
-        {/* Middle */}
-        <Link className=" cursor-pointer  text-white md:px-[200px]" href="/">
-          Yusuf Kaplan
-        </Link>
-      </nav>
+        >
+          <Link className="    " href="/">
+            about
+          </Link>
+          <Link className="    " href="/">
+            skills
+          </Link>
+          <Link className="    " href="/">
+            projects
+          </Link>
+          <Link className="    " href="/">
+            contact
+          </Link>
+        </nav>
+        <div className="w-full h-[2px] bg-[#0000FE] dark:bg-[#ffdb9c] mx-[14px]"></div>
+      </div>
     </>
   );
 }
