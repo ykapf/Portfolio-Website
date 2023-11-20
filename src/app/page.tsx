@@ -31,7 +31,7 @@ export default function Home() {
     <main className="flex min-h-screen  flex-col    bg-[#EBE5D2] dark:bg-[#492201]  -z-50     ">
       {/* <Navbar /> */}
 
-      <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px] min-h-screen ">
+      <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px]  " style={{ minHeight: `100svh` }}>
         <div
           className={`kaftanFont   absolute top-50  origin-center flex items-center justify-center     -translate-y-[25%]             text-[#ffffff] dark:text-[#633200] transform scale-y-125 blur-[6px]`}
           style={{ fontSize: "23.75vw" }}
