@@ -38,7 +38,7 @@ export default function Footer() {
   return (
     <>
       <nav
-        className={` w-full flex flex-row justify-between items-center py-[28px] font-light text-3xl  cursor-none    bg-black h-[300px] px-[75px] 
+        className={` w-full flex flex-row justify-between items-center py-[28px] font-light text-3xl  cursor-none    bg-black h-[300px] px-[25px] md:px-[75px] 
         `}
       >
         {/* Footer content */}
