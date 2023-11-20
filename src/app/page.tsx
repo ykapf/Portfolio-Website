@@ -49,7 +49,8 @@ export default function Home() {
           Welcome to my Portfolio
         </div> */}
       </div>
-      <div className=" px-[175px] pb-[100px] grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
+
+      <div className=" md:px-[125px] lg:px-[175px]   mb-32 grid items-center justify-center md:gap-x-[100px] xl:gap-x-0 text-center md:grid-cols-2 xl:grid-cols-4 md:text-left">
         {links.map(({ href, title, description }, index) => (
           <a
             key={index}
