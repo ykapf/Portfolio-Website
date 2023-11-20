@@ -37,8 +37,10 @@ body {
   font-family: "Kaftan", sans-serif; /* Fallback to sans-serif or any other font */
 }
 
-* {
-  cursor: none;
+@media screen and (min-width: 768px) {
+  * {
+    cursor: none;
+  }
 }
 
 ::selection {

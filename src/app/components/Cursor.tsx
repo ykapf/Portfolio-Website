@@ -42,7 +42,7 @@ export default function CustomCursor() {
         visibility: isVisible ? "visible" : "hidden",
       }}
     >
-      <img src="/cursors/toup.png" alt="Custom Cursor" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+      <img src="/cursors/toup.png" alt="Custom Cursor" style={{ maxWidth: "100%", maxHeight: "100%" }} className="hidden md:block" />
     </div>
   );
 }
