@@ -62,7 +62,7 @@ function UserRepos() {
         <form className="w-full items-center justify-between flex flex-row mb-10" onSubmit={handleSubmit}>
           <input
             type="text"
-            className=" p-2 border border-gray-300 dark:bg-black opacity-75 hover:opacity-100 delay-75 duration-300 w-full rounded-md"
+            className=" p-2 border bg-black opacity-75 hover:opacity-100 delay-75 duration-300 w-full rounded-md"
             placeholder="GitHub username..."
             value={inputUsername}
             onChange={(e) => setInputUsername(e.target.value)}
@@ -82,7 +82,7 @@ function UserRepos() {
               {repos.map((repo) => (
                 <a
                   key={repo.id}
-                  className="justify-between flex flex-row cursor-hover my-1 p-4 hover:bg-[#f1f1f1] hover:dark:bg-[#161B22] delay-75 duration-300 rounded-md"
+                  className="justify-between flex flex-row cursor-hover my-1 p-4  hover:dark:bg-[#161B22] delay-75 duration-300 rounded-md"
                   href={`https://github.com/${username}/${repo.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -130,7 +130,7 @@ function UserRepos() {
 
       <div className="w-1/2 h-fit flex justify-center items-center mx-10 sticky top-6">
         {user && (
-          <div className="flex flex-col justify-center  w-fit p-8 rounded-xl  bg-[#f1f1f1] dark:bg-[#161B22]">
+          <div className="flex flex-col justify-center  w-fit p-8 rounded-xl   bg-[#161B22]">
             <img src={user.avatar_url} alt={user.login} width={250} height={250} className="rounded-full mb-4" />
 
             <a

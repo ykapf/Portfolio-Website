@@ -7,34 +7,29 @@
   src: url("/fonts/kaftan-trial.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
-  /* Add other font properties as needed */
 }
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 234, 229, 210;
-  --background-end-rgb: 234, 229, 210;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 73, 34, 1;
-    --background-end-rgb: 73, 34, 1;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  background: rgb(var(--background-end-rgb));
 }
 
-/* * {
-  border: 1px solid red;
-} */
-
 .kaftanFont {
-  font-family: "Kaftan", sans-serif; /* Fallback to sans-serif or any other font */
+  font-family: "Kaftan", sans-serif;
 }
 
 @media screen and (min-width: 768px) {
@@ -47,3 +42,7 @@ body {
   background: #f0a4007a;
   color: #111;
 }
+
+/* * {
+  border: 1px solid red;
+} */

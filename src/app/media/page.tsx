@@ -10,15 +10,15 @@ export default function Home() {
         <div className="px-4 py-8 fixed w-full z-20 top-0 left-0 ">
           <div className="container flex flex-wrap items-center justify-between mx-auto">
             <a href="/" className="flex group rounded-lg px-5 ">
-              <h2 className="mb-3 text-xl font-semibold">
-                <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none mr-1">&lt;-</span>
+              <h2 className="mb-3 text-xl font-semibold text-white">
+                <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none mr-1 ">&lt;-</span>
                 Back
               </h2>
             </a>
-            <h1 className="mb-2 text-3xl font-bold hover:scale-[97%] transition ease-in-out delay-75 duration-300 cursor-default">Media Viewer</h1>
+            <h1 className="mb-2 text-3xl font-bold hover:scale-[97%] transition ease-in-out delay-75 duration-300 text-white">Media Viewer</h1>
             <div className="flex group rounded-lg px-5 ">
-              <h2 className="mb-3 text-xl font-semibold opacity-0 cursor-default">
-                <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none mr-1">&lt;-</span>
+              <h2 className="mb-3 text-xl font-semibold opacity-0  text-white">
+                <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none mr-1 ">&lt;-</span>
                 Back
               </h2>
             </div>
