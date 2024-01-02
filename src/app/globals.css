@@ -39,8 +39,13 @@ body {
 }
 
 ::selection {
-  background: #f0a4007a;
-  color: #111;
+  background: none;
+  color: inherit;
+}
+
+body,
+html {
+  overscroll-behavior-y: none;
 }
 
 /* * {
