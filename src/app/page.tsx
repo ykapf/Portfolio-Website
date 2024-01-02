@@ -28,7 +28,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex min-h-screen  flex-col     bg-[rgb(235,229,210)] dark:bg-[#0000FE]  -z-50     overflow-y-hidden">
+    <main className="flex min-h-screen  flex-col     bg-[rgb(235,229,210)] dark:bg-[#0000FE]  -z-50     overflow-x-hidden no-scrollbar">
       {/* <Navbar /> */}
 
       <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px]  " style={{ minHeight: `100svh` }}>
