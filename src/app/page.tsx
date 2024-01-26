@@ -124,7 +124,7 @@ export default function Home() {
       {/* ABOUT  */}
       <div className="w-full h-full grid grid-cols-4 items-center justify-center  px-[75px] py-[75px] " style={{ minHeight: `100svh` }}>
         <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]   text-black dark:text-white      `}
+          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[18px] sm:text-[25px]   text-black dark:text-white      `}
         >
           {/* Welcome to my portfolio -  */}
           I&apos;m a Computer Science and AI student at Loughborough University with a strong interest in merging design and functionality. I have experience
