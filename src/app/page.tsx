@@ -1,7 +1,8 @@
 "use client";
-import Image from "next/image";
-import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { motion, useAnimation } from "framer-motion";
+import Link from "next/link";
+import Button from "./components/Button";
 
 export default function Home() {
   const links = [
@@ -27,27 +28,46 @@ export default function Home() {
     },
   ];
 
+  const borderVariants = {
+    initial: { width: "80%" },
+    hover: {
+      width: "0%",
+      transition: {
+        duration: 0.5, // Set the duration to your preference (in seconds)
+        ease: "easeInOut", // Optional: define the type of easing for the animation
+      },
+    },
+  };
+
+  // Wrapper variants to control the hover state for the whole button area
+  const wrapperVariants = {
+    hover: {},
+  };
+
   return (
-    <main className="flex min-h-screen  flex-col     bg-[rgb(235,229,210)] dark:bg-[#0000FE]  -z-50     overflow-y-auto ">
+    // bg-[rgb(235,229,210)] dark:bg-[#0000FE]
+    <main className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    grayscale">
       {/* <Navbar /> */}
 
-      <div className="w-full h-full  flex flex-col items-center justify-center     px-[75px] pt-[75px]  " style={{ minHeight: `100svh` }}>
+      <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] pt-[75px]  " style={{ minHeight: `100svh` }}>
         <div
-          className={`kaftanFont   absolute top-50  origin-center flex items-center justify-center     -translate-y-[25%]             text-[#ffffff]/50 dark:text-[#3e3eff] transform scale-y-125 blur-[6px]`}
+          // text-[#ffffff]/50 dark:text-[#3e3eff]
+          className={`kaftanFont   absolute top-50  origin-center flex items-center justify-center     -translate-y-[25%]    text-[#F0F0F0] dark:text-[#0F0F0F]          -z-[10] transform scale-y-125 blur-[6px]`}
           style={{ fontSize: "23.75vw" }}
         >
           portfolio
         </div>
+
         <div
-          className={` kaftanFont   flex items-center justify-center  text-[150px]  lowercase text-[#0000FE] dark:text-[#FFFFFF] z-10 `}
+          // text-[#0000FE] dark:text-[#FFFFFF]
+          className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-[#000000] dark:text-[#FFFFFF]   lowercase   `}
           style={{ fontSize: "8.95vw" }}
         >
           Yusuf Kaplan.
         </div>
-
-        {/* <div className=" mb-2 text-2xl opacity-50 font-bold  text-center">
-          Welcome to my Portfolio
-        </div> */}
+        <div className="relative  flex items-center justify-end pt-[50px] ">
+          <Button href="/about" buttonText="ABOUT" />
+        </div>
       </div>
 
       <div className=" md:px-[125px] lg:px-[175px]   mb-32 grid items-start justify-center md:gap-x-[100px] xl:gap-x-0 text-center md:grid-cols-2 xl:grid-cols-4 md:text-left">
@@ -55,15 +75,15 @@ export default function Home() {
           <a
             key={index}
             href={href}
-            className={`group rounded-md border border-transparent px-5 py-4 transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-300/20 delay-50 `}
+            className={`custom-cursor-clickable    group rounded-md border border-transparent px-5 py-4 transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-300/20 delay-50 `}
           >
-            <h2 className="mb-[6px] text-2xl font-base  text-[#0000FE] dark:text-[rgb(235,229,210)] uppercase   transform scale-y-[1.1]">
+            <h2 className="custom-cursor-clickable  mb-[6px] text-2xl font-base  text-[#0000FE] dark:text-[rgb(235,229,210)] uppercase   transform scale-y-[1.1]">
               {title}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none duration-500 transform scale-y-[0.7]">
+              <span className="custom-cursor-clickable  inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none duration-500 transform scale-y-[0.7]">
                 -&gt;
               </span>
             </h2>
-            <p className="m-0 max-w-[30ch] text-sm opacity-50 ">{description}</p>
+            <p className="custom-cursor-clickable  m-0 max-w-[30ch] text-sm opacity-50 ">{description}</p>
           </a>
         ))}
       </div>
