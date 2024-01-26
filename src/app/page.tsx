@@ -28,22 +28,6 @@ export default function Home() {
     },
   ];
 
-  const borderVariants = {
-    initial: { width: "80%" },
-    hover: {
-      width: "0%",
-      transition: {
-        duration: 0.5, // Set the duration to your preference (in seconds)
-        ease: "easeInOut", // Optional: define the type of easing for the animation
-      },
-    },
-  };
-
-  // Wrapper variants to control the hover state for the whole button area
-  const wrapperVariants = {
-    hover: {},
-  };
-
   return (
     // bg-[rgb(235,229,210)] dark:bg-[#0000FE]
     <main className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    grayscale">
