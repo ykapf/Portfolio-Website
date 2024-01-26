@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center  p-24  bg-black">
+    <div className="flex min-h-screen flex-col items-center  p-24  bg-black">
       <div className="px-4 py-8 fixed w-full z-20 top-0 left-0 ">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
           <a href="/" className="flex group rounded-lg px-5 ">
@@ -32,6 +32,6 @@ export default function Home() {
           <div className="w-full h-fit flex justify-center items-center p-4 "></div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

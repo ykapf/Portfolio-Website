@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     // bg-[rgb(235,229,210)] dark:bg-[#0000FE]
-    <main className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    grayscale">
+    <div className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    grayscale">
       {/* <Navbar /> */}
 
       <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] pt-[75px]  " style={{ minHeight: `100svh` }}>
@@ -73,6 +73,6 @@ export default function Home() {
       </div>
 
       <Footer />
-    </main>
+    </div>
   );
 }
