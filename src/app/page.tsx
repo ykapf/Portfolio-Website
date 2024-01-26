@@ -54,11 +54,6 @@ export default function Home() {
       title: "GTA V Radio",
       description: "Web app developed to listen to GTA V radio stations online.",
     },
-    {
-      href: "/",
-      title: "Templates",
-      description: "This is a placeholder for future, featured projects.",
-    },
   ];
 
   useEffect(() => {
