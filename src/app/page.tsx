@@ -160,7 +160,10 @@ export default function Home() {
           className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]   text-black dark:text-white      flex flex-col gap-[25px]`}
         >
           {links.map(({ href, title, description }, index) => (
-            <div key={index} className=" custom-cursor-clickable outline pb-[10px] ">
+            <div
+              key={index}
+              className=" custom-cursor-clickable outline pb-[10px] hover:bg-black dark:hover:bg-white hover:text-white hover:dark:text-black font-medium  transition ease-in-out duration-200 delay-50"
+            >
               <a href={href} className={`custom-cursor-clickable     `}>
                 <h2 className="custom-cursor-clickable ">
                   {title}
