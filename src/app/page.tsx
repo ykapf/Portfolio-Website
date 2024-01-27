@@ -40,7 +40,7 @@ const AnimatedLetter: React.FC<AnimatedLetterProps> = ({ letter, index, scrollYP
 export default function Home() {
   const links = [
     {
-      href: "/media",
+      href: "/projects/media",
       title: "Media",
       description: "Check out my embedded media viewer page using YouTube's embed API.",
     },
