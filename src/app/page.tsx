@@ -50,7 +50,8 @@ export default function Home() {
       description: "View any GitHub user's repositories and account details using GitHub's API.",
     },
     {
-      href: "https://gtav-radio.vercel.app/",
+      // href: "https://gtav-radio.vercel.app/",
+      href: "/projects/radio",
       title: "GTA V Radio",
       description: "Web app developed to listen to GTA V radio stations online.",
     },
