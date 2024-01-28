@@ -25,7 +25,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant }) => {
         scrub: true, // Smooth scrubbing, true for 1 second of scrubbing (change this value for more "stickiness")
         pin: true, // Pin the element in place while the animation is active
         pinSpacing: false, // No spacing while pinned
-        markers: true, // Shows start and end markers, useful for debugging
+        markers: false, // Shows start and end markers, useful for debugging
       },
     });
 
