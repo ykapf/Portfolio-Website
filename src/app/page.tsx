@@ -1,12 +1,10 @@
 "use client";
 import Footer from "./components/Footer";
-import { useScroll, useTransform, motion, useAnimation, MotionValue } from "framer-motion";
-import Link from "next/link";
+import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import Button from "./components/Button";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import Showcase from "./components/Showcase";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,59 +55,24 @@ export default function Home() {
     },
   ];
 
-  useEffect(() => {
-    // Create the timeline for the animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".showcase", // Class of the element to trigger the animation
-        start: "center center", // When the top of the trigger hits the center of the viewport
-        end: "bottom center", // When the bottom of the trigger hits the center of the viewport
-        scrub: true, // Smooth scrubbing, true for 1 second of scrubbing (change this value for more "stickiness")
-        pin: true, // Pin the element in place while the animation is active
-        pinSpacing: false, // No spacing while pinned
-        markers: false, // Shows start and end markers, useful for debugging
-      },
-    });
-
-    // Cleanup function
-    return () => {
-      // Kill the timeline on component unmount
-      tl.kill();
-    };
-  }, []);
-
   const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]);
+  // const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]);
   const word = "EXPERIENCE.".split("");
 
-  // const rotations = word.map((_, index) => {
-  //   // Adjust the rotation to slow down between 25% and 75% of the scroll progress
-  //   return useTransform(
-  //     scrollYProgress,
-  //     // Input Range: Define points of scroll progress
-  //     [0, 0.35, 0.5, 0.65, 1],
-  //     // Output Range: Define rotation degree at each point
-  //     [index * 45, index * 25, 0, -index * 25, -index * 45]
-  //   );
-  // });
-
   return (
-    // bg-[rgb(235,229,210)] dark:bg-[#0000FE]
     <div className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    ">
       {/* HERO  */}
-      <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] py-[75px]  " style={{ minHeight: `100svh` }}>
-        <div
-          // text-[#ffffff]/50 dark:text-[#3e3eff]
+      <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] py-[75px]   " style={{ minHeight: `100svh` }}>
+        {/* <div
           className={`kaftanFont   absolute top-50  origin-center flex items-center justify-center     -translate-y-[25%]    text-[#F0F0F0] dark:text-[#0F0F0F]          -z-[10] transform scale-y-125 blur-[6px]`}
           style={{ fontSize: "23.75vw" }}
         >
           portfolio
-        </div>
+        </div> */}
 
         <div
-          // text-[#0000FE] dark:text-[#FFFFFF]
           className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-black dark:text-white   lowercase   `}
-          style={{ fontSize: "8.95vw" }}
+          style={{ fontSize: "12.5vw" }}
         >
           Yusuf Kaplan.
         </div>
@@ -129,16 +92,16 @@ export default function Home() {
         </div>
       </div>
 
-      {/* SHOWCASE DIVIDER  */}
+      {/* SHOWCASE TILE  */}
       <motion.div
         className="showcase w-full h-full flex items-start justify-center  px-[75px] py-[75px] overflow-hidden grayscale   relative     "
         style={{ minHeight: `100svh` }}
       >
         <motion.div
           className=" relative  top-0 transform  flex items-center justify-center uppercase text-[25px] text-black dark:text-white"
-          style={{ minHeight: `100vh`, minWidth: `100vw`, scale }}
+          style={{ minHeight: `100vh`, minWidth: `100vw` }}
         >
-          <img src="/PRIZE_REVEAL.gif" alt="SHOWCASE" style={{ objectFit: "cover" }} className=" w-full h-full sticky" />
+          <Showcase scrollYProgress={scrollYProgress} variant="default" />
           <div
             className="custom-cursor-clickable kaftanFont absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center lowercase text-[150px] text-black dark:text-white"
             style={{ fontSize: "12.5vw" }}
@@ -149,6 +112,7 @@ export default function Home() {
           </div>
         </motion.div>
       </motion.div>
+      {/* SHOWCASE DIVIDER  */}
       <div className=" w-full h-full hidden lg:flex    " style={{ minHeight: `80svh` }}></div>
       <div className=" w-full h-full flex lg:hidden    " style={{ minHeight: `40svh` }}></div>
 
