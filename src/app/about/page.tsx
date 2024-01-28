@@ -42,7 +42,7 @@ export default function About() {
           >
             I&apos;m a Computer Science and AI student at Loughborough University with a strong interest in merging design and functionality. I have experience
             working with businesses and startups, helping to design and develop their online presence from concept to implementation. My expertise lies in using
-            modern technologies like Next.js, React, and TypeScript, but I&apos;m also proficient in a variety of other programming languages.
+            modern technologies such as Next.js, React, and TypeScript, in addition to a variety of other programming languages.
           </div>
         </div>
 

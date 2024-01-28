@@ -86,9 +86,17 @@ export default function Home() {
           className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[18px] sm:text-[25px]   text-black dark:text-white      `}
         >
           {/* Welcome to my portfolio -  */}
-          I&apos;m a Computer Science and AI student at Loughborough University with a strong interest in merging design and functionality. I have experience
-          working with businesses and startups, helping to design and develop their online presence from concept to implementation. My expertise lies in using
-          modern technologies like Next.js, React, and TypeScript, but I&apos;m also proficient in a variety of other programming languages.
+          <div className="custom-cursor-clickable   text-[22px] sm:text-[35px] pb-[15px]">
+            {" "}
+            I&apos;m a Computer Science and AI student at Loughborough University.
+          </div>
+          <span className="custom-cursor-clickable  ">
+            {" "}
+            I have experience working with businesses and startups, helping to design and develop their online presence from concept to implementation.
+          </span>
+          {/* with a strong interest in merging design and functionality.  */}
+          {/* My expertise lies in using modern technologies like Next.js, React, and TypeScript, but */}
+          {/* I&apos;m also proficient in a variety of other programming languages. */}
         </div>
       </div>
 
