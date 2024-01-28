@@ -13,8 +13,12 @@ interface ShowcaseProps {
 }
 
 const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant, pSrc }) => {
-  const scale =
-    variant === "default" ? useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]) : useTransform(scrollYProgress, [0, 0.17, 0.45, 1], [0.6, 0.6, 1, 1]);
+  // Define both scale transforms
+  const scaleDefault = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]);
+  const scaleDelayed = useTransform(scrollYProgress, [0, 0.17, 0.45, 1], [0.6, 0.6, 1, 1]);
+
+  // Choose the scale based on the variant
+  const scale = variant === "default" ? scaleDefault : scaleDelayed;
 
   useEffect(() => {
     // Create the timeline for the animation
