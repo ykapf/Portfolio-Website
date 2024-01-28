@@ -28,7 +28,7 @@ export default function About() {
             className="py-[350px]   top-0 transform  flex items-center justify-center uppercase text-[25px] text-black dark:text-white    "
             style={{ minHeight: `100vh`, minWidth: `100vw` }}
           >
-            <Showcase scrollYProgress={scrollYProgress} variant="delayed" />
+            <Showcase scrollYProgress={scrollYProgress} variant="delayed" pSrc="/ABOUT.gif" />
           </motion.div>
         </motion.div>
 

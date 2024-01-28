@@ -9,9 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 interface ShowcaseProps {
   scrollYProgress: any;
   variant: "default" | "delayed";
+  pSrc: string;
 }
 
-const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant }) => {
+const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant, pSrc }) => {
   const scale =
     variant === "default" ? useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]) : useTransform(scrollYProgress, [0, 0.17, 0.45, 1], [0.6, 0.6, 1, 1]);
 
@@ -42,7 +43,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant }) => {
         className="relative top-0 transform flex items-center justify-center uppercase text-[25px] text-black dark:text-white"
         style={{ minWidth: `100vw`, scale }}
       >
-        <img src="/PRIZE_REVEAL.gif" alt="SHOWCASE" style={{ objectFit: "cover" }} className="w-full h-full " />
+        <img src={pSrc} alt="SHOWCASE" style={{ objectFit: "cover" }} className="w-full h-full " />
       </motion.div>
     </motion.div>
   );

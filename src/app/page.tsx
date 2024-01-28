@@ -101,7 +101,7 @@ export default function Home() {
           className=" relative  top-0 transform  flex items-center justify-center uppercase text-[25px] text-black dark:text-white"
           style={{ minHeight: `100vh`, minWidth: `100vw` }}
         >
-          <Showcase scrollYProgress={scrollYProgress} variant="default" />
+          <Showcase scrollYProgress={scrollYProgress} variant="default" pSrc="/PRIZE_REVEAL.gif" />
           <div
             className="custom-cursor-clickable kaftanFont absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center lowercase text-[150px] text-black dark:text-white"
             style={{ fontSize: "12.5vw" }}
