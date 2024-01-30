@@ -28,8 +28,8 @@ export default function About() {
         </motion.div>
 
         {/* SHOWCASE DIVIDER  */}
-        <div className=" w-full h-full hidden lg:flex  bg-white dark:bg-black   " style={{ minHeight: `70svh` }}></div>
-        <div className=" w-full h-full flex lg:hidden  bg-white dark:bg-black   " style={{ minHeight: `30svh` }}></div>
+        <div className=" w-full h-full hidden lg:flex  bg-white dark:bg-black   " style={{ minHeight: `75svh` }}></div>
+        <div className=" w-full h-full flex lg:hidden  bg-white dark:bg-black   " style={{ minHeight: `35svh` }}></div>
         {/* ABOUT  */}
         <div className="w-full h-full grid grid-cols-4 items-center justify-center  px-[75px]  bg-white dark:bg-black  z-5 " style={{ minHeight: `100svh` }}>
           <div
