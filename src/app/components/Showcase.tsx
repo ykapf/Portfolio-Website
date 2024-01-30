@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useScroll, useTransform, motion } from "framer-motion";
 import Image from "next/image";
+import css from "styled-jsx/css";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,6 +11,11 @@ interface ShowcaseProps {
   scrollYProgress: any;
   variant: "default" | "delayed";
   pSrc: string;
+}
+
+interface WindowSize {
+  width: number | undefined;
+  height: number | undefined;
 }
 
 const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant, pSrc }) => {
@@ -20,7 +26,25 @@ const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant, pSrc }) =
   // Choose the scale based on the variant
   const scale = variant === "default" ? scaleDefault : scaleDelayed;
 
+  // State to keep track of the window size
+  const [windowSize, setWindowSize] = useState<WindowSize>({
+    width: typeof window !== "undefined" ? window.innerWidth : undefined,
+    height: typeof window !== "undefined" ? window.innerHeight : undefined,
+  });
+
+  // Handler to call on window resize
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
   useEffect(() => {
+    // Set size at the first client-side load
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
     // Create the timeline for the animation
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -41,13 +65,30 @@ const Showcase: React.FC<ShowcaseProps> = ({ scrollYProgress, variant, pSrc }) =
     };
   }, []);
 
+  // Calculate the aspect ratios
+  const screenAspectRatio = windowSize.width && windowSize.height ? windowSize.width / windowSize.height : undefined;
+  const targetAspectRatio = 488 / 276;
+
+  // Decide image style based on aspect ratio comparison
+  const isWider = screenAspectRatio && screenAspectRatio > targetAspectRatio;
+  const imageStyle = isWider
+    ? { width: "100vw", height: "100vh" } // Screen is wider
+    : { width: "100vw", height: "100vh" };
+
+  // Define a className for overflow handling
+  const overflowClassName = css`
+    ${isWider ? "overflow-x-hidden" : "overflow-y-hidden"};
+  `;
+
   return (
-    <motion.div className="showcase w-full h-full flex items-start justify-center px-[75px]  overflow-hidden grayscale relative   ">
+    <motion.div className={`showcase w-full h-full flex items-start justify-center  overflow-hidden grayscale  ${overflowClassName} `}>
       <motion.div
-        className="relative top-0 transform flex items-center justify-center uppercase text-[25px] text-black dark:text-white"
-        style={{ minWidth: `100vw`, scale }}
+        className={` transform flex items-center justify-center uppercase text-[25px] text-black dark:text-white ${
+          screenAspectRatio && screenAspectRatio > targetAspectRatio ? "overflowX-hidden" : "overflowY-hidden"
+        }`}
+        style={{ ...imageStyle, scale: scale }}
       >
-        <img src={pSrc} alt="SHOWCASE" style={{ objectFit: "cover" }} className="w-full h-full " />
+        <Image src={pSrc} alt="SHOWCASE" style={{ objectFit: "cover" }} width={100} height={100} className="w-full h-full " />
       </motion.div>
     </motion.div>
   );
