@@ -72,7 +72,7 @@ export default function Home() {
 
         <div
           className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-black dark:text-white   lowercase   `}
-          style={{ fontSize: "9.5vw" }}
+          style={{ fontSize: "8.95vw" }}
         >
           Yusuf Kaplan.
         </div>

@@ -73,6 +73,7 @@ export default function CustomCursor() {
         pointerEvents: "none",
         zIndex: 9999,
         visibility: isVisible ? "visible" : "hidden",
+        WebkitBackdropFilter: "invert(1)",
         backdropFilter: "invert(1)",
         boxSizing: "border-box",
         transition: "opacity 0.15s ease-in-out",
