@@ -5,6 +5,7 @@ import Button from "./components/Button";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Showcase from "./components/Showcase";
+import DragonFly from "./components/DragonFly";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,7 +61,11 @@ export default function Home() {
   const word = "EXPERIENCE.".split("");
 
   return (
-    <div className="flex min-h-screen  flex-col    bg-white dark:bg-black       -z-50     overflow-y-auto    ">
+    <div className="flex min-h-screen  flex-col         -z-50     overflow-y-auto   ">
+      <div className="absolute inset-0 -z-10 min-h-[100vh] min-w-[100vw] h-full w-full bg-[#f5f0e6]  bg-[radial-gradient(#d3cec5_1px,transparent_1px)] [background-size:32px_32px]" />
+      {/* <div className="">
+        <DragonFly />
+      </div> */}
       {/* HERO  */}
       <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] py-[75px]   " style={{ minHeight: `100svh` }}>
         {/* <div
@@ -71,28 +76,34 @@ export default function Home() {
         </div> */}
 
         <div
-          className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-black dark:text-white   lowercase   `}
+          className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-black    lowercase   `}
           style={{ fontSize: "8.95vw" }}
         >
           Yusuf Kaplan.
         </div>
-        <div className="relative  flex items-center justify-end pt-[100px] ">
-          <Button href="/about" buttonText="ABOUT" />
+        <div
+          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]  pb-[2.5vh]  text-black     font-medium `}
+          style={{ fontSize: "1.75vw" }}
+        >
+          Computer Science and AI student at Loughborough University.
         </div>
       </div>
       {/* ABOUT  */}
-      <div className="w-full h-full grid grid-cols-4 items-center justify-center  px-[75px] py-[75px] " style={{ minHeight: `100svh` }}>
+      <div className="w-full h-full grid grid-cols-4 items-center justify-center  px-[75px] py-[75px] bg-black" style={{ minHeight: `100svh` }}>
+        <div className="col-span-4 lg:col-span-2 lg:col-start-2      relative  flex items-center justify-center pb-[100px] ">
+          <Button href="/about" buttonText="ABOUT" />
+        </div>
         <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[18px] sm:text-[25px]   text-black dark:text-white      `}
+          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[18px] sm:text-[25px]   text-[#f5f0e6]     font-medium `}
         >
           {/* Welcome to my portfolio -  */}
-          <div className="custom-cursor-clickable   text-[22px] sm:text-[35px] pb-[2.5vh]">
+          {/* <div className="custom-cursor-clickable   text-[22px] sm:text-[35px] pb-[2.5vh]">
             {" "}
             I&apos;m a Computer Science and AI student at Loughborough University.
-          </div>
+          </div> */}
           <span className="custom-cursor-clickable  text-[22px] sm:text-[35px] ">
             {" "}
-            Working with businesses and startups to design and develop their online presence.
+            I work with businesses and startups to design and develop their online presence.
             {/* I have experience working with businesses and startups, helping to design and develop their online presence from concept to implementation. */}
           </span>
           {/* with a strong interest in merging design and functionality.  */}
@@ -107,12 +118,12 @@ export default function Home() {
         style={{ minHeight: `100svh` }}
       >
         <motion.div
-          className=" relative  top-0 transform  flex items-center justify-center uppercase text-[25px] text-black dark:text-white"
+          className=" relative  top-0 transform  flex items-center justify-center uppercase text-[25px] text-[black] "
           style={{ minHeight: `100vh`, minWidth: `100vw` }}
         >
           <Showcase scrollYProgress={scrollYProgress} variant="default" pSrc="/PRIZE_REVEAL.gif" />
           <div
-            className="custom-cursor-clickable kaftanFont absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center lowercase text-[150px] text-black dark:text-white"
+            className="custom-cursor-clickable kaftanFont absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center lowercase text-[150px] text-[#f5f0e6]"
             style={{ fontSize: "12.5vw" }}
           >
             {word.map((letter, index) => (
@@ -126,17 +137,17 @@ export default function Home() {
       <div className=" w-full h-full flex lg:hidden    " style={{ minHeight: `50svh` }}></div>
 
       {/* PROJECTS  */}
-      <div className=" w-full h-full grid grid-cols-4 items-center justify-center gap-[50px] px-[75px] py-[75px] " style={{ minHeight: `100svh` }}>
+      <div className=" w-full h-full grid grid-cols-4 items-center justify-center gap-[50px] px-[75px] py-[75px] bg-black" style={{ minHeight: `100svh` }}>
         <div className="col-span-4 lg:col-span-2 lg:col-start-2      relative  flex items-center justify-center pb-[100px] ">
           <Button href="/projects" buttonText="PROJECTS" />
         </div>
         <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]   text-black dark:text-white      flex flex-col gap-[25px]`}
+          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]   text-[#f5f0e6]      flex flex-col gap-[25px]`}
         >
           {links.map(({ href, title, description }, index) => (
             <div
               key={index}
-              className=" custom-cursor-clickable outline pb-[10px] hover:bg-black dark:hover:bg-white hover:text-white hover:dark:text-black font-medium  transition ease-in-out duration-200 delay-50"
+              className=" custom-cursor-clickable outline pb-[10px] hover:bg-[#f5f0e6]  hover:text-black font-medium  transition ease-in-out duration-200 delay-50"
             >
               <a href={href} className={`custom-cursor-clickable     `}>
                 <h2 className="custom-cursor-clickable ">
