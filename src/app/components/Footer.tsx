@@ -38,15 +38,15 @@ export default function Footer() {
   return (
     <>
       <nav
-        className={` w-full flex flex-row justify-between items-center py-[28px] font-light text-3xl  cursor-none    bg-white dark:bg-black h-[300px] px-[25px] md:px-[75px] 
+        className={` w-full flex flex-row justify-between items-center py-[28px] font-light text-3xl  cursor-none    bg-black h-[300px] px-[25px] md:px-[75px] 
         `}
       >
         {/* Footer content */}
-        <div id="gmtTime" className=" text-black dark:text-white uppercase">
+        <div id="gmtTime" className=" text-[#f5f0e6] uppercase">
           Loading time...
         </div>
         {/* Middle */}
-        <Link className="custom-cursor-clickable    text-black dark:text-white cursor-none hover:underline " href="/">
+        <Link className="custom-cursor-clickable    text-[#f5f0e6] cursor-none hover:underline " href="/">
           @ykapf.
         </Link>
       </nav>

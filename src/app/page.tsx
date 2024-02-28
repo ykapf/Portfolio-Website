@@ -61,7 +61,7 @@ export default function Home() {
   const word = "EXPERIENCE.".split("");
 
   return (
-    <div className="flex min-h-screen  flex-col         -z-50     overflow-y-auto   ">
+    <div className="flex  flex-col         -z-50     overflow-y-auto   ">
       <div className="absolute inset-0 -z-10 min-h-[100vh] min-w-[100vw] h-full w-full bg-[#f5f0e6]  bg-[radial-gradient(#d3cec5_1px,transparent_1px)] [background-size:32px_32px]" />
       {/* <div className="">
         <DragonFly />
