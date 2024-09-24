@@ -44,14 +44,14 @@ export default function Home() {
           {links.map(({ href, title, description }, index) => (
             <div
               key={index}
-              className="group p-6 border border-[#f5f0e6]   custom-cursor-clickable outline pb-[10px] hover:bg-[#f5f0e6]  hover:text-black font-medium  transition ease-in-out duration-200 delay-50"
+              className="group p-6 border border-[#f5f0e6]   custom-cursor-clickable outline pb-[10px] hover:bg-[#f5f0e6]  hover:text-black font-light  transition ease-in-out duration-200 delay-50"
             >
               <a href={href} className={`custom-cursor-clickable     `}>
                 <h2 className="custom-cursor-clickable ">
                   {title}
                   <span className="custom-cursor-clickable  ">-&gt;</span>
                 </h2>
-                <p className="custom-cursor-clickable  ">{description}</p>
+                <p className="custom-cursor-clickable  font-medium text-xl pt-4">{description}</p>
               </a>
             </div>
           ))}
