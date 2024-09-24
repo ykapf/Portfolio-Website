@@ -9,6 +9,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "HEADLINE";
+  src: url("/fonts/Headline.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 0, 0, 0;
@@ -30,6 +37,10 @@ body {
 
 .kaftanFont {
   font-family: "Kaftan", sans-serif;
+}
+
+.headlineFont {
+  font-family: "HEADLINE", sans-serif;
 }
 
 @media screen and (min-width: 768px) {

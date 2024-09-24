@@ -1,153 +1,50 @@
 "use client";
 import Footer from "./components/Footer";
-import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import Button from "./components/Button";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Showcase from "./components/Showcase";
-import DragonFly from "./components/DragonFly";
-
-gsap.registerPlugin(ScrollTrigger);
-
-interface AnimatedLetterProps {
-  letter: string;
-  index: number;
-  scrollYProgress: MotionValue<number>;
-}
-
-function useLetterAnimation(scrollYProgress: MotionValue<number>, index: number) {
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]);
-  const rotation = useTransform(scrollYProgress, [0, 0.35, 0.5, 0.65, 1], [index * 45, index * 25, 0, -index * 25, -index * 45]);
-  return { scale, rotation };
-}
-
-const AnimatedLetter: React.FC<AnimatedLetterProps> = ({ letter, index, scrollYProgress }) => {
-  const { scale, rotation } = useLetterAnimation(scrollYProgress, index);
-  return (
-    <motion.div
-      className="inline-block"
-      style={{
-        scale: scale,
-        rotate: rotation,
-      }}
-    >
-      {letter}
-    </motion.div>
-  );
-};
 
 export default function Home() {
   const links = [
     {
       href: "/projects/media",
       title: "Media",
-      description: "Check out my embedded media viewer page using YouTube's embed API.",
+      description: "Watch Youtube videos without ads.",
     },
     {
-      href: "/repos",
-      title: "Repos",
-      description: "View any GitHub user's repositories and account details using GitHub's API.",
-    },
-    {
-      // href: "https://gtav-radio.vercel.app/",
       href: "/projects/radio",
       title: "GTA V Radio",
-      description: "Web app developed to listen to GTA V radio stations online.",
+      description: "Listen to GTA V radio stations online.",
     },
   ];
 
-  const { scrollYProgress } = useScroll();
-  // const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 1]);
-  const word = "EXPERIENCE.".split("");
-
   return (
-    <div className="flex  flex-col         -z-50     overflow-y-auto   ">
-      <div className="absolute inset-0 -z-10 min-h-[100vh] min-w-[100vw] h-full w-full bg-[#f5f0e6]  bg-[radial-gradient(#d3cec5_1px,transparent_1px)] [background-size:32px_32px]" />
-      {/* <div className="">
-        <DragonFly />
-      </div> */}
-      {/* HERO  */}
-      <div className="w-full h-full  flex flex-col items-center justify-center gap-[50px]     px-[75px] py-[75px]   " style={{ minHeight: `100svh` }}>
-        {/* <div
-          className={`kaftanFont   absolute top-50  origin-center flex items-center justify-center     -translate-y-[25%]    text-[#F0F0F0] dark:text-[#0F0F0F]          -z-[10] transform scale-y-125 blur-[6px]`}
-          style={{ fontSize: "23.75vw" }}
-        >
-          portfolio
-        </div> */}
-
-        <div
-          className={`custom-cursor-clickable kaftanFont   flex items-center justify-center  text-[150px]   text-black    lowercase   `}
-          style={{ fontSize: "8.95vw" }}
-        >
-          Yusuf Kaplan.
-        </div>
-        <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]  pb-[2.5vh]  text-black     font-medium `}
-          style={{ fontSize: "1.75vw" }}
-        >
-          Computer Science and AI student at Loughborough University.
-        </div>
-      </div>
-      {/* ABOUT  */}
-      <div className="w-full h-full grid grid-cols-4 items-center justify-center  px-[75px] py-[75px] bg-black" style={{ minHeight: `100svh` }}>
-        <div className="col-span-4 lg:col-span-2 lg:col-start-2      relative  flex items-center justify-center pb-[100px] ">
-          <Button href="/about" buttonText="ABOUT" />
-        </div>
-        <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[18px] sm:text-[25px]   text-[#f5f0e6]     font-medium `}
-        >
-          {/* Welcome to my portfolio -  */}
-          {/* <div className="custom-cursor-clickable   text-[22px] sm:text-[35px] pb-[2.5vh]">
-            {" "}
-            I&apos;m a Computer Science and AI student at Loughborough University.
-          </div> */}
-          <span className="custom-cursor-clickable  text-[22px] sm:text-[35px] ">
-            {" "}
-            I work with businesses and startups to design and develop their online presence.
-            {/* I have experience working with businesses and startups, helping to design and develop their online presence from concept to implementation. */}
-          </span>
-          {/* with a strong interest in merging design and functionality.  */}
-          {/* My expertise lies in using modern technologies like Next.js, React, and TypeScript, but */}
-          {/* I&apos;m also proficient in a variety of other programming languages. */}
-        </div>
+    <div className="relative flex flex-col min-h-screen  text-[#f5f0e6]">
+      {/* Vertical Grid Background */}
+      <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 h-full w-full border-l border-r border-gray-300 opacity-30 z-0">
+        {/* Adding borders to create vertical grid outlines */}
+        <div className="border-r border-gray-300" />
+        <div className="border-r border-gray-300" />
+        <div className="border-r border-gray-300" />
+        {/* Last column doesn't need a right border */}
       </div>
 
-      {/* SHOWCASE TILE  */}
-      <motion.div
-        className="showcase w-full h-full flex items-start justify-center  px-[75px] py-[75px] overflow-hidden grayscale   relative     "
-        style={{ minHeight: `100svh` }}
-      >
-        <motion.div
-          className=" relative  top-0 transform  flex items-center justify-center uppercase text-[25px] text-[black] "
-          style={{ minHeight: `100vh`, minWidth: `100vw` }}
-        >
-          <Showcase scrollYProgress={scrollYProgress} variant="default" pSrc="/PRIZE_REVEAL.gif" />
-          <div
-            className="custom-cursor-clickable kaftanFont absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center lowercase text-[150px] text-[#f5f0e6]"
-            style={{ fontSize: "12.5vw" }}
-          >
-            {word.map((letter, index) => (
-              <AnimatedLetter key={index} letter={letter} index={index} scrollYProgress={scrollYProgress} />
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
-      {/* SHOWCASE DIVIDER  */}
-      <div className=" w-full h-full hidden lg:flex    " style={{ minHeight: `70svh` }}></div>
-      <div className=" w-full h-full flex lg:hidden    " style={{ minHeight: `50svh` }}></div>
-
-      {/* PROJECTS  */}
-      <div className=" w-full h-full grid grid-cols-4 items-center justify-center gap-[50px] px-[75px] py-[75px] bg-black" style={{ minHeight: `100svh` }}>
-        <div className="col-span-4 lg:col-span-2 lg:col-start-2      relative  flex items-center justify-center pb-[100px] ">
-          <Button href="/projects" buttonText="PROJECTS" />
+      {/* Main Content */}
+      <div className="relative z-10">
+        <Footer />
+        {/* Hero Section */}
+        <div className="flex flex-col items-center justify-center min-h-[70vh] text-center headlineFont capitalize ">
+          <div className="text-[15vw] -rotate-90 md:text-[8vw] md:rotate-0  mb-4 ">Portfolio</div>
         </div>
+
+        {/* Projects Section */}
         <div
-          className={`custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-center justify-center uppercase text-[25px]   text-[#f5f0e6]      flex flex-col gap-[25px]`}
+          className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-24 lg:px-32 py-24     
+        custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-stretch justify-center uppercase text-[25px]   text-[#f5f0e6]      
+        "
         >
           {links.map(({ href, title, description }, index) => (
             <div
               key={index}
-              className=" custom-cursor-clickable outline pb-[10px] hover:bg-[#f5f0e6]  hover:text-black font-medium  transition ease-in-out duration-200 delay-50"
+              className="group p-6 border border-[#f5f0e6]   custom-cursor-clickable outline pb-[10px] hover:bg-[#f5f0e6]  hover:text-black font-medium  transition ease-in-out duration-200 delay-50"
             >
               <a href={href} className={`custom-cursor-clickable     `}>
                 <h2 className="custom-cursor-clickable ">
@@ -160,8 +57,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
