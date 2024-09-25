@@ -1,4 +1,3 @@
-"use client";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
 
@@ -38,7 +37,7 @@ export default function Home() {
         {/* Projects Section */}
         <div
           className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-24 lg:px-32 py-24     
-        custom-cursor-clickable    col-span-4 lg:col-span-2 lg:col-start-2    text-center items-stretch justify-center uppercase text-[25px]   text-[#f5f0e6]      
+            col-span-4 lg:col-span-2 lg:col-start-2    text-center items-stretch justify-center uppercase text-[25px]   text-[#f5f0e6]      
         "
         >
           {links.map(({ href, title, description }, index) => (

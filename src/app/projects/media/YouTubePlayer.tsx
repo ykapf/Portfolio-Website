@@ -78,17 +78,29 @@ const YouTubePlayer: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col items-center ">
+    <div
+      className=" h-full   
+  
+  w-full flex flex-col gap-12 px-24 lg:px-32 py-24     
+           text-center items-center justify-center uppercase text-[25px]   text-[#f5f0e6]      
+      
+      "
+    >
       <iframe
         className="w-full h-fit md:w-fit md:h-full border-0 aspect-video "
         src={videoSrc}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
       />
+
       <input
         type="text"
-        placeholder="Paste a URL to a YouTube video or playlist"
-        className="my-7 p-2 border bg-black opacity-25 hover:opacity-50 delay-75 duration-300 w-full md:w-1/2"
+        placeholder="Paste YouTube video or playlist URL"
+        className=" items-center text-center  border border-[#f5f0e6]   custom-cursor-clickable outline pb-[10px] 
+        
+        hover:bg-[#f5f0e6] focus:bg-[#f5f0e6] text-[#f5f0e6] hover:text-black focus:text-black font-medium text-sm md:text-xl  transition ease-in-out duration-200 delay-50
+              placeholder:text-[#f5f0e6] hover:placeholder:text-black focus:placeholder:text-black placeholder:uppercase placeholder:font-medium placeholder:text-sm md:placeholder:text-xl placeholder:transition placeholder:ease-in-out placeholder:duration-200 placeholder:delay-50
+        my-7 mx-12 p-2  bg-black   w-full md:w-1/2 rounded-none outline-none   "
         onChange={(e) => setInputValue(e.target.value)}
         onClick={(e) => e.currentTarget.select()}
       />
