@@ -180,7 +180,10 @@ export default function RadioWheel({}: RadioWheelProps) {
         `}
       </style>
       {/* Mobile Now Playing Bar */}
-      <div className="height-mobile md:hidden fixed top-0 left-0 w-full h-[100px] bg-black text-white flex items-center justify-center z-10">
+      <div
+        className="height-mobile md:hidden fixed bottom-0 left-0 w-full h-[100px] bg-black text-white flex items-center justify-center z-10
+      border-t border-[#f5f0e6]"
+      >
         {selectedStation && (
           <div className="flex flex-row justify-start items-center w-full px-[25px]">
             <img
@@ -192,13 +195,13 @@ export default function RadioWheel({}: RadioWheelProps) {
             <div className="pl-[20px] text-start flex-col">
               <div className="font-bold text-lg">{selectedStation.name}</div>
               <div className="text-sm">{selectedStation.description}</div>
-              <div className="text-sm">current song placeholder</div>
+              <div className="text-sm"></div> {/* Current Song Placeholder */}
             </div>
           </div>
         )}
       </div>
       {/* Mobile Layout */}
-      <div className={`height-mobile md:hidden flex flex-col items-center justify-center gap-4 p-4 mt-[100px]`}>
+      <div className={`height-mobile md:hidden flex flex-col items-center justify-center gap-4 p-4 mb-[100px]`}>
         {stations.map((station) => {
           const imagePath = `/radio/radio_icons/${station.image}`;
 
@@ -236,7 +239,11 @@ export default function RadioWheel({}: RadioWheelProps) {
       {/* Desktop Layout Alternative */}
       <div className={` h-[(100vh+600px)]   hidden  md:block`}>
         {/* Desktop Now Playing Bar */}
-        <div className=" flex fixed top-0 left-0 w-full h-[100px] bg-black text-white  items-center  z-10 justify-end">
+        <div
+          className=" flex fixed bottom-0 left-0 w-full h-[100px] bg-black text-white  items-center  z-10 justify-end
+        border-t border-[#f5f0e6]
+        "
+        >
           {selectedStation && (
             <div className="flex flex-row justify-start items-center w-2/3 pl-[75px]">
               <img
@@ -248,7 +255,7 @@ export default function RadioWheel({}: RadioWheelProps) {
               <div className="pl-[20px] text-start flex-col">
                 <div className="font-bold text-lg">{selectedStation.name}</div>
                 <div className="text-sm">{selectedStation.description}</div>
-                <div className="text-sm">current song placeholder</div>
+                <div className="text-sm"></div> {/* Current Song Placeholder */}
               </div>
             </div>
           )}
@@ -354,7 +361,7 @@ export default function RadioWheel({}: RadioWheelProps) {
         </div>
         {/* alt Desktop Layout */}
 
-        <div className={` grid md:grid-cols-1    items-center justify-center gap-4 p-4 mt-[100px]`}>
+        <div className={` grid md:grid-cols-1    items-center justify-center gap-4 p-4 mb-[100px]`}>
           {stations.map((station) => {
             const imagePath = `/radio/radio_icons/${station.image}`;
 
