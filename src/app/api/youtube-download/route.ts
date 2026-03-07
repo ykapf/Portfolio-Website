@@ -85,6 +85,16 @@ const getFormatOptions = (videoInfo: any) => {
 
 const ytDlpBinaryPath = process.env.YT_DLP_PATH || path.join(os.tmpdir(), "yt-dlp-bin", process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp");
 
+const getYtDlpReleaseAssetUrl = () => {
+  if (process.platform === "win32") {
+    return "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe";
+  }
+  if (process.platform === "darwin") {
+    return "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos";
+  }
+  return "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux";
+};
+
 let ytDlpReadyPromise: Promise<void> | null = null;
 const ensureYtDlpBinary = async () => {
   if (ytDlpReadyPromise) return ytDlpReadyPromise;
@@ -97,7 +107,7 @@ const ensureYtDlpBinary = async () => {
       return;
     } catch {
       await mkdir(path.dirname(ytDlpBinaryPath), { recursive: true });
-      await YTDlpWrap.downloadFromGithub(ytDlpBinaryPath);
+      await YTDlpWrap.downloadFile(getYtDlpReleaseAssetUrl(), ytDlpBinaryPath);
       if (process.platform !== "win32") {
         await chmod(ytDlpBinaryPath, 0o755);
       }
