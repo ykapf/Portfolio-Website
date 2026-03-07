@@ -4,6 +4,7 @@ import { Readable } from "node:stream";
 import { access, chmod, mkdir } from "node:fs/promises";
 import { constants } from "node:fs";
 import path from "node:path";
+import os from "node:os";
 
 export const runtime = "nodejs";
 const ONLY_SUPPORTED_FORMAT = "mp4";
@@ -82,7 +83,7 @@ const getFormatOptions = (videoInfo: any) => {
     });
 };
 
-const ytDlpBinaryPath = process.env.YT_DLP_PATH || path.join(process.cwd(), "download", "bin", process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp");
+const ytDlpBinaryPath = process.env.YT_DLP_PATH || path.join(os.tmpdir(), "yt-dlp-bin", process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp");
 
 let ytDlpReadyPromise: Promise<void> | null = null;
 const ensureYtDlpBinary = async () => {
