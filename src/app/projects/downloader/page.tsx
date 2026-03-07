@@ -3,19 +3,6 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-const debounce = (fn: (...args: any[]) => void, ms: number) => {
-  let timer: ReturnType<typeof setTimeout> | null = null;
-  return (...args: any[]) => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      timer = null;
-      fn(...args);
-    }, ms);
-  };
-};
-
 const getSuggestedFilename = (urlString: string) => {
   try {
     const url = new URL(urlString);
@@ -28,113 +15,17 @@ const getSuggestedFilename = (urlString: string) => {
   }
 };
 
-const isYouTubeUrl = (urlString: string) => {
-  try {
-    const parsed = new URL(urlString);
-    return parsed.hostname === "www.youtube.com" || parsed.hostname === "youtube.com" || parsed.hostname === "m.youtube.com" || parsed.hostname === "youtu.be";
-  } catch {
-    return false;
-  }
-};
-
-const extractFilenameFromDisposition = (contentDisposition: string | null) => {
-  if (!contentDisposition) return "";
-  const utfMatch = /filename\*=UTF-8''([^;]+)/i.exec(contentDisposition);
-  if (utfMatch?.[1]) return decodeURIComponent(utfMatch[1]);
-  const asciiMatch = /filename="([^"]+)"/i.exec(contentDisposition);
-  if (asciiMatch?.[1]) return asciiMatch[1];
-  return "";
-};
-
 export default function Downloader() {
   const [url, setUrl] = useState("");
   const [customName, setCustomName] = useState("");
-  const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState<string>("");
-  const [previewEmbedSrc, setPreviewEmbedSrc] = useState("");
-  const [previewThumbnailSrc, setPreviewThumbnailSrc] = useState("");
   const [downloadPhase, setDownloadPhase] = useState<"idle" | "loading" | "done">("idle");
   const [buttonProgress, setButtonProgress] = useState(0);
   const [hasDownloadedOnce, setHasDownloadedOnce] = useState(false);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const previousHasVideoPreviewRef = useRef(false);
 
   const suggestedName = useMemo(() => getSuggestedFilename(url), [url]);
-  const hasVideoPreview = Boolean(previewThumbnailSrc || previewEmbedSrc);
-  const originalVideoUrl = useMemo(() => {
-    const trimmedUrl = url.trim();
-    return isYouTubeUrl(trimmedUrl) ? trimmedUrl : "";
-  }, [url]);
-  const debouncedPreview = useRef(
-    debounce((urlString: string) => {
-      if (!urlString.trim()) {
-        setPreviewEmbedSrc("");
-        setPreviewThumbnailSrc("");
-        return;
-      }
-
-      try {
-        const parsed = new URL(urlString);
-        const host = parsed.hostname;
-        const baseParams = "iv_load_policy=3&controls=1&modestbranding=1&playsinline=1&color=white";
-
-        if (host === "www.youtube.com" || host === "youtube.com" || host === "m.youtube.com") {
-          const vParam = parsed.searchParams.get("v");
-          const listParam = parsed.searchParams.get("list");
-
-          if (vParam && listParam) {
-            setPreviewEmbedSrc(`https://www.youtube.com/embed/${vParam}?list=${listParam}&${baseParams}`);
-            setPreviewThumbnailSrc(`https://img.youtube.com/vi/${vParam}/hqdefault.jpg`);
-            return;
-          }
-
-          if (vParam) {
-            setPreviewEmbedSrc(`https://www.youtube.com/embed/${vParam}?${baseParams}`);
-            setPreviewThumbnailSrc(`https://img.youtube.com/vi/${vParam}/hqdefault.jpg`);
-            return;
-          }
-
-          if (listParam) {
-            setPreviewEmbedSrc(`https://www.youtube.com/embed/videoseries?list=${listParam}&${baseParams}`);
-            setPreviewThumbnailSrc("");
-            return;
-          }
-        }
-
-        if (host === "youtu.be") {
-          const videoId = parsed.pathname.slice(1);
-          if (videoId) {
-            setPreviewEmbedSrc(`https://www.youtube.com/embed/${videoId}?${baseParams}`);
-            setPreviewThumbnailSrc(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`);
-            return;
-          }
-        }
-
-        setPreviewEmbedSrc("");
-        setPreviewThumbnailSrc("");
-      } catch {
-        setPreviewEmbedSrc("");
-        setPreviewThumbnailSrc("");
-      }
-    }, 1250),
-  );
-
-  useEffect(() => {
-    debouncedPreview.current(url);
-  }, [url]);
-
-  useEffect(() => {
-    if (hasVideoPreview && !previousHasVideoPreviewRef.current) {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "smooth",
-        });
-      });
-    }
-    previousHasVideoPreviewRef.current = hasVideoPreview;
-  }, [hasVideoPreview]);
 
   useEffect(() => {
     return () => {
@@ -210,62 +101,8 @@ export default function Downloader() {
     }
 
     startLoadingUi();
-    setIsDownloading(true);
 
     try {
-      if (isYouTubeUrl(parsedUrl.toString())) {
-        const ytResponse = await fetch("/api/youtube-download", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: parsedUrl.toString(),
-            filename: customName.trim() || undefined,
-          }),
-        });
-        const ytResult = await ytResponse.json();
-        if (!ytResponse.ok) {
-          throw new Error(ytResult.error || "YouTube download setup failed.");
-        }
-
-        if (typeof ytResult.downloadUrl !== "string") {
-          throw new Error("Could not create a YouTube download URL.");
-        }
-
-        const mediaResponse = await fetch(ytResult.downloadUrl);
-        const mediaContentType = mediaResponse.headers.get("content-type") || "";
-        if (!mediaResponse.ok || mediaContentType.includes("application/json")) {
-          let errorMessage = `YouTube download failed (HTTP ${mediaResponse.status}).`;
-          try {
-            const payload = await mediaResponse.json();
-            if (typeof payload?.error === "string") {
-              errorMessage = payload.error;
-            }
-          } catch {
-            // Keep default error text.
-          }
-          throw new Error(errorMessage);
-        }
-
-        const blob = await mediaResponse.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const serverFileName = extractFilenameFromDisposition(mediaResponse.headers.get("content-disposition"));
-        const fallbackBaseName = customName.trim() || "youtube-download";
-        const safeBaseName = fallbackBaseName.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "").trim() || "youtube-download";
-        const suggestedFileName = serverFileName || `${safeBaseName}.mp4`;
-
-        const anchor = document.createElement("a");
-        anchor.href = blobUrl;
-        anchor.download = suggestedFileName;
-        anchor.rel = "noopener";
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-        URL.revokeObjectURL(blobUrl);
-
-        finishLoadingUi();
-        return;
-      }
-
       const response = await fetch(parsedUrl.toString(), { method: "GET" });
       if (!response.ok) {
         throw new Error(`Download failed (HTTP ${response.status}).`);
@@ -292,7 +129,6 @@ export default function Downloader() {
         setError("Could not download this URL. The source may block cross-origin requests.");
       }
     } finally {
-      setIsDownloading(false);
     }
   };
 
@@ -323,7 +159,7 @@ export default function Downloader() {
                 required
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="Paste file URL or YouTube link"
+                placeholder="Paste direct file URL"
                 className="items-center text-center border border-[#f5f0e6] custom-cursor-clickable outline pb-[10px]
                 hover:bg-[#f5f0e6] focus:bg-[#f5f0e6] text-[#f5f0e6] hover:text-black focus:text-black font-medium text-sm md:text-xl transition ease-in-out duration-200 delay-50
                 placeholder:text-[#f5f0e6] hover:placeholder:text-black focus:placeholder:text-black placeholder:uppercase placeholder:font-medium placeholder:text-sm md:placeholder:text-xl placeholder:transition placeholder:ease-in-out placeholder:duration-200 placeholder:delay-50
@@ -331,49 +167,14 @@ export default function Downloader() {
                 onClick={(e) => e.currentTarget.select()}
               />
 
-              {previewThumbnailSrc ? (
-                <a
-                  href={originalVideoUrl || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Go to original video"
-                  className="group relative block w-full border border-[#f5f0e6] custom-cursor-clickable"
-                  onClick={(e) => {
-                    if (!originalVideoUrl) {
-                      e.preventDefault();
-                    }
-                  }}
-                >
-                  <img
-                    src={previewThumbnailSrc}
-                    alt="YouTube preview thumbnail"
-                    className="w-full aspect-video object-cover [filter:blur(0px)_saturate(1)] transition-[filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:[filter:blur(2px)_saturate(0.5)]"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition duration-200 ease-in-out group-hover:opacity-100">
-                    <span className="text-lg md:text-3xl font-semibold uppercase tracking-wide text-[#f5f0e6]">Go to original video</span>
-                  </div>
-                </a>
-              ) : null}
-
-              {!previewThumbnailSrc && previewEmbedSrc ? (
-                <iframe
-                  className="w-full border-0 aspect-video"
-                  src={previewEmbedSrc}
-                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              ) : null}
-
-              {hasVideoPreview ? (
-                <input
-                  type="text"
-                  value={customName}
-                  onChange={(e) => setCustomName(e.target.value)}
-                  placeholder="RENAME (OPTIONAL)"
-                  className="w-full p-3 bg-transparent border border-[#f5f0e6] text-[#f5f0e6] outline-none font-medium text-sm md:text-xl
+              <input
+                type="text"
+                value={customName}
+                onChange={(e) => setCustomName(e.target.value)}
+                placeholder="RENAME (OPTIONAL)"
+                className="w-full p-3 bg-transparent border border-[#f5f0e6] text-[#f5f0e6] outline-none font-medium text-sm md:text-xl
                   placeholder:font-medium placeholder:text-sm md:placeholder:text-xl"
-                />
-              ) : null}
+              />
 
               <button
                 type="submit"
