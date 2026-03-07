@@ -10,7 +10,7 @@ export default function Radio() {
 
     <div className="relative flex flex-col min-h-screen  text-[#f5f0e6]">
       {/* Vertical Grid Background */}
-      <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 h-full w-full border-l border-r border-gray-300 opacity-30 z-0">
+      <div className="pointer-events-none absolute inset-0 grid grid-cols-2 md:grid-cols-4 h-full w-full border-l border-r border-gray-300 opacity-30 z-0">
         {/* Adding borders to create vertical grid outlines */}
         <div className="border-r border-gray-300" />
         <div className="border-r border-gray-300" />
