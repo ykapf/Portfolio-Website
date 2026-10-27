@@ -7,7 +7,7 @@ import RetroRacer from "./retro-racer/RetroRacer";
 /**
  * Full-screen intro: the OutRun-style racer with a live GitHub HUD. On portrait
  * screens the scene fills the whole screen, with the stats panel over the sky
- * and the rev counter near the bottom, above the radio.
+ * and the rev counter stacked beneath it.
  */
 export default function PixelHero() {
   const clockRef = useRef(0);
@@ -18,9 +18,6 @@ export default function PixelHero() {
         <GithubHud className="intro-ui z-10 portrait:hidden" clockRef={clockRef} />
         <div className="intro-ui absolute inset-x-0 top-0 z-10 hidden pt-[env(safe-area-inset-top)] portrait:block">
           <GithubHud variant="top" />
-        </div>
-        {/* Clears the floating radio (its offset + RADIO_H × pixel size + 8px), which is too wide to share the row. */}
-        <div className="intro-ui absolute inset-x-0 bottom-[92px] z-10 hidden portrait:block md:bottom-[100px] lg:bottom-[134px]">
           <GithubHud variant="bottom" clockRef={clockRef} />
         </div>
       </div>
