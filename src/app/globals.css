@@ -43,8 +43,9 @@ body {
   font-family: "HEADLINE", sans-serif;
 }
 
-@media screen and (min-width: 768px) {
-  * {
+/* Only hide the native pointer once the custom cursor has mounted, so a JS failure never leaves the page cursorless. */
+@media screen and (pointer: fine) and (min-width: 768px) {
+  html.custom-cursor-on * {
     cursor: none;
   }
 }
@@ -66,3 +67,30 @@ html {
 /* * {
   border: 1px solid red;
 } */
+
+/* Nearest-neighbour upscale for the RetroRacer canvas; crop keeps the car in frame. */
+.retro-racer-hud {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.retro-racer-canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  object-fit: cover;
+  object-position: 50% 80%;
+}
+
+/* Hero stays hidden until the intro covers it, and the HUD and radio until the intro has ended. */
+html:not(.intro-scene) #pixel-hero {
+  visibility: hidden;
+}
+
+.intro-ui {
+  transition: opacity 500ms ease-out;
+}
+
+html:not(.intro-ui) .intro-ui {
+  opacity: 0;
+  pointer-events: none;
+}

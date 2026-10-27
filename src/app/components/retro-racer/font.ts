@@ -1,0 +1,79 @@
+/** 3×5 bitmap font for neon signs and the optional HUD. */
+const GLYPHS: Record<string, string> = {
+  "0": "111101101101111",
+  "1": "010110010010111",
+  "2": "111001111100111",
+  "3": "111001111001111",
+  "4": "101101111001001",
+  "5": "111100111001111",
+  "6": "111100111101111",
+  "7": "111001010010010",
+  "8": "111101111101111",
+  "9": "111101111001111",
+  A: "010101111101101",
+  B: "110101110101110",
+  C: "111100100100111",
+  D: "110101101101110",
+  E: "111100110100111",
+  F: "111100110100100",
+  G: "111100101101111",
+  H: "101101111101101",
+  I: "111010010010111",
+  K: "101101110101101",
+  L: "100100100100111",
+  M: "101111111101101",
+  N: "110101101101101",
+  O: "111101101101111",
+  P: "111101111100100",
+  R: "110101110101101",
+  S: "111100111001111",
+  T: "111010010010010",
+  J: "001001001101111",
+  Q: "111101101111001",
+  U: "101101101101111",
+  V: "101101101101010",
+  W: "101101111111101",
+  X: "101101010101101",
+  Y: "101101010010010",
+  Z: "111001010100111",
+  ".": "000000000000010",
+  "/": "001001010100100",
+  ":": "000010000010000",
+  "-": "000000111000000",
+  "+": "000010111010000",
+  "!": "010010010000010",
+  "'": "010010000000000",
+  ",": "000000000010100",
+  "&": "010101010101011",
+  "(": "001010010010001",
+  ")": "100010010010100",
+  ">": "100010001010100",
+  " ": "000000000000000",
+};
+
+export const GLYPH_W = 3;
+export const GLYPH_H = 5;
+
+export function textWidth(text: string): number {
+  return Math.max(0, text.length * (GLYPH_W + 1) - 1);
+}
+
+/** Calls `plot` for every lit pixel of `text`, laid out horizontally. */
+export function forEachTextPixel(text: string, plot: (x: number, y: number) => void): void {
+  for (let i = 0; i < text.length; i++) {
+    const g = GLYPHS[text[i]] ?? GLYPHS[" "];
+    for (let p = 0; p < 15; p++) {
+      if (g[p] === "1") plot(i * (GLYPH_W + 1) + (p % 3), Math.floor(p / 3));
+    }
+  }
+}
+
+/** Same as forEachTextPixel but stacks letters vertically. */
+export function forEachVerticalTextPixel(text: string, plot: (x: number, y: number) => void): void {
+  for (let i = 0; i < text.length; i++) {
+    const g = GLYPHS[text[i]] ?? GLYPHS[" "];
+    for (let p = 0; p < 15; p++) {
+      if (g[p] === "1") plot(p % 3, i * (GLYPH_H + 1) + Math.floor(p / 3));
+    }
+  }
+}

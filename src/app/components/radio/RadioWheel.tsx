@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect, CSSProperties, useRef } from "react";
 import Papa from "papaparse";
-
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: () => void;
-    YT: any;
-  }
-}
+import { loadYouTubeApi } from "./youtubeApi";
 
 type Station = {
   name: string;
@@ -37,33 +31,26 @@ export default function RadioWheel({}: RadioWheelProps) {
 
   useEffect(() => {
     // Load the YouTube IFrame Player API if not already loaded
-    if (!window.YT) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-      window.onYouTubeIframeAPIReady = () => {
-        playerRef.current = new window.YT.Player("youtube-player", {
-          width: "01",
-          height: "01",
-          videoId: "", // Default video ID, can be a placeholder
-          startSeconds: 0, // gonna be useful if i want to add random start times.===
-          events: {
-            onReady: () => setPlayerReady(true),
-          },
-          playerVars: {
-            playsinline: 1,
-            autoplay: 1,
-            controls: 1,
-            modestbranding: 1,
-            loop: 1,
-            playlist: "", // Same as videoId for looping
-            allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; allowfullscreen; loop;",
-          },
-        });
-      };
-    }
+    loadYouTubeApi().then(() => {
+      playerRef.current = new window.YT.Player("youtube-player", {
+        width: "01",
+        height: "01",
+        videoId: "", // Default video ID, can be a placeholder
+        startSeconds: 0, // gonna be useful if i want to add random start times.===
+        events: {
+          onReady: () => setPlayerReady(true),
+        },
+        playerVars: {
+          playsinline: 1,
+          autoplay: 1,
+          controls: 1,
+          modestbranding: 1,
+          loop: 1,
+          playlist: "", // Same as videoId for looping
+          allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; allowfullscreen; loop;",
+        },
+      });
+    });
   }, []);
 
   // Function to handle volume changes from the slider

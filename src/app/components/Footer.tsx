@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Link from "next/link";
-
 export default function Footer() {
   useEffect(() => {
     function updateGMTTime() {
@@ -46,9 +44,14 @@ export default function Footer() {
           Loading time...
         </div>
         {/* Middle */}
-        <Link className="custom-cursor-clickable    text-[#f5f0e6] cursor-none hover:underline w-1/2 md:w-1/4  text-center" href="/">
+        <a
+          className="custom-cursor-clickable    text-[#f5f0e6] cursor-none hover:underline w-1/2 md:w-1/4  text-center"
+          href="https://github.com/ykapf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           @YKAPF
-        </Link>
+        </a>
       </nav>
     </>
   );
