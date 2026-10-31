@@ -1,21 +1,34 @@
-import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import sharp from "sharp";
 import { H, W } from "../../components/retro-racer/config";
 import { HudStats, HudStatus, drawHudStats, drawHudTicker, tickerLine } from "../../components/retro-racer/hud";
 import { REVALIDATE, loadGithubStats } from "../github-stats/stats";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
-const SCALE = 2;
-const BLINK_S = 1.06;
+// Half a blink cycle; the 24s loop must be a whole number of cycles so the blink doesn't jump at the seam.
+const BLINK_HALF_MS = 600;
 
-let animation: Promise<string> | null = null;
+interface Animation {
+  frames: Buffer;
+  pages: number;
+  delay: number[];
+}
 
-/** The pre-rendered scene from `npm run render:readme`, as a data URI. */
-function loadAnimation(): Promise<string> {
-  animation ??= readFile(join(process.cwd(), "public/readme/racer.webp")).then(
-    (b) => `data:image/webp;base64,${b.toString("base64")}`,
-  );
+let animation: Promise<Animation> | null = null;
+let cached: { key: string; at: number; bytes: Promise<Buffer> } | null = null;
+
+/** The pre-rendered scene from `npm run render:readme`, decoded to raw RGBA frames. */
+function loadAnimation(): Promise<Animation> {
+  animation ??= (async () => {
+    const img = sharp(join(process.cwd(), "public/readme/racer.webp"), { animated: true, limitInputPixels: false });
+    const meta = await img.metadata();
+    const frames = await img.ensureAlpha().raw().toBuffer();
+    const pages = meta.pages ?? 1;
+    return { frames, pages, delay: meta.delay ?? new Array(pages).fill(80) };
+  })();
   animation.catch(() => (animation = null));
   return animation;
 }
@@ -44,56 +57,63 @@ function rasterise(draw: (ctx: CanvasRenderingContext2D) => void): (string | nul
   return grid;
 }
 
-/** One `<path>` per colour, built from horizontal runs of same-coloured pixels. */
-function gridToSvg(grid: (string | null)[]): string {
-  const runs = new Map<string, string[]>();
-  for (let y = 0; y < H; y++) {
-    let x = 0;
-    while (x < W) {
-      const c = grid[y * W + x];
-      let end = x + 1;
-      while (end < W && grid[y * W + end] === c) end++;
-      if (c) {
-        const list = runs.get(c) ?? [];
-        list.push(`M${x} ${y}h${end - x}v1h-${end - x}z`);
-        runs.set(c, list);
-      }
-      x = end;
-    }
+/** The painted pixels of a grid as flat [offset, r, g, b] quads, ready to stamp onto every frame. */
+function toStamp(grid: (string | null)[]): Int32Array {
+  const out: number[] = [];
+  grid.forEach((c, i) => {
+    if (!c) return;
+    const n = parseInt(c.slice(1), 16);
+    out.push(i * 4, (n >> 16) & 255, (n >> 8) & 255, n & 255);
+  });
+  return Int32Array.from(out);
+}
+
+function stamp(frames: Buffer, base: number, quads: Int32Array) {
+  for (let i = 0; i < quads.length; i += 4) {
+    const o = base + quads[i];
+    frames[o] = quads[i + 1];
+    frames[o + 1] = quads[i + 2];
+    frames[o + 2] = quads[i + 3];
   }
-  let out = "";
-  runs.forEach((d, c) => (out += `<path fill="${c}" d="${d.join("")}"/>`));
-  return out;
+}
+
+/** Bakes the HUD into every frame and encodes one plain animated WebP, which browsers play natively. */
+async function encode(stats: HudStats | null, status: HudStatus): Promise<Buffer> {
+  const { frames: base, pages, delay } = await loadAnimation();
+  const ticker = tickerLine(stats, status);
+  const hud = toStamp(rasterise((ctx) => drawHudStats(ctx, W, H, stats, null)));
+  const tick = toStamp(rasterise((ctx) => drawHudTicker(ctx, W, ticker.text)));
+
+  const frames = Buffer.from(base);
+  const size = W * H * 4;
+  let t = 0;
+  for (let f = 0; f < pages; f++) {
+    stamp(frames, f * size, hud);
+    if (!ticker.blinks || Math.floor(t / BLINK_HALF_MS) % 2 === 0) stamp(frames, f * size, tick);
+    t += delay[f];
+  }
+
+  return sharp(frames, { raw: { width: W, height: H * pages, channels: 4, pageHeight: H }, limitInputPixels: false })
+    .webp({ lossless: true, effort: 3, loop: 0, delay })
+    .toBuffer();
 }
 
 export async function GET() {
-  const [src, result] = await Promise.all([
-    loadAnimation(),
-    loadGithubStats().then(
-      (stats) => ({ stats: stats as HudStats | null, status: "ready" as HudStatus }),
-      () => ({ stats: null, status: "offline" as HudStatus }),
-    ),
-  ]);
+  const result = await loadGithubStats().then(
+    (stats) => ({ stats: stats as HudStats | null, status: "ready" as HudStatus }),
+    () => ({ stats: null, status: "offline" as HudStatus }),
+  );
   const { stats, status } = result;
-  const ticker = tickerLine(stats, status);
-  const hud = gridToSvg(rasterise((ctx) => drawHudStats(ctx, W, H, stats, null)));
-  const tick = gridToSvg(rasterise((ctx) => drawHudTicker(ctx, W, ticker.text)));
-  const blink = ticker.blinks
-    ? `<animate attributeName="opacity" values="1;0" keyTimes="0;0.5" dur="${BLINK_S}s" calcMode="discrete" repeatCount="indefinite"/>`
-    : "";
-  const summary = stats
-    ? `GitHub stats for ${stats.user}: ${stats.currentStreak} day streak, ${stats.longestStreak} day best streak, ${stats.lastYear} contributions in the last year, ${stats.lastWeek} this week.`
-    : "GitHub stats unavailable.";
+  const key = JSON.stringify([status, stats?.currentStreak, stats?.longestStreak, stats?.lastYear, stats?.lastWeek, stats?.bestDay, stats?.todayCount]);
+  if (!cached || cached.key !== key || Date.now() - cached.at > REVALIDATE * 1000) {
+    cached = { key, at: Date.now(), bytes: encode(stats, status) };
+    cached.bytes.catch(() => (cached = null));
+  }
+  const bytes = await cached.bytes;
 
-  const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${W * SCALE}" height="${H * SCALE}" viewBox="0 0 ${W} ${H}" shape-rendering="crispEdges" role="img">` +
-    `<title>Pixel-art Ferrari F40 driving down a Miami coastal highway at sunset. ${summary}</title>` +
-    `<image width="${W}" height="${H}" preserveAspectRatio="none" style="image-rendering:crisp-edges;image-rendering:pixelated" href="${src}"/>` +
-    `<g>${hud}</g><g>${blink}${tick}</g></svg>`;
-
-  return new Response(svg, {
+  return new Response(new Uint8Array(bytes), {
     headers: {
-      "Content-Type": "image/svg+xml; charset=utf-8",
+      "Content-Type": "image/webp",
       "Cache-Control": `public, max-age=${REVALIDATE}, s-maxage=${REVALIDATE}, stale-while-revalidate=${REVALIDATE * 6}`,
     },
   });

@@ -12,9 +12,10 @@ import { fileURLToPath } from "node:url";
 const { quantize, applyPalette } = gifenc;
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(root, "public/readme/racer.webp");
-// The card is embedded in a serverless response capped at 4.5 MB, so the frame rate is the size budget.
-// WebP frame delays are whole milliseconds; 1000 / FPS must be an integer to keep the loop exact.
-const FPS = Number(process.env.FPS ?? 12.5);
+// The card is a serverless response capped at 4.5 MB, so the frame rate is the size budget.
+// WebP frame delays are whole milliseconds, and the 24s loop must divide evenly by the delay.
+const DELAY_MS = Number(process.env.DELAY_MS ?? 60);
+const FPS = 1000 / DELAY_MS;
 // Fog blending gives each frame ~1000 colours; one shared small palette lets WebP use its indexed mode.
 const COLOURS = Number(process.env.COLOURS ?? 128);
 const PALETTE_SAMPLE_EVERY = 6;
@@ -37,9 +38,9 @@ try {
   await page.addScriptTag({ content: bundle.outputFiles[0].text });
   const info = await page.evaluate(() => window.RACER);
   ({ W, H } = info);
-  const count = Math.round(info.LOOP_SECONDS * FPS);
+  const count = Math.round((info.LOOP_SECONDS * 1000) / DELAY_MS);
   for (let i = 0; i < count; i++) {
-    const b64 = await page.evaluate((t) => window.renderFrame(t), i / FPS);
+    const b64 = await page.evaluate((t) => window.renderFrame(t), (i * DELAY_MS) / 1000);
     frames.push(new Uint8Array(Buffer.from(b64, "base64")));
     if (i % 50 === 0) process.stdout.write(`\rrendered ${i}/${count}`);
   }
@@ -66,9 +67,9 @@ frames.forEach((frame, f) => {
 });
 
 const bytes = await sharp(strip, { raw: { width: W, height: H * frames.length, channels: 4, pageHeight: H } })
-  .webp({ lossless: true, effort: 6, loop: 0, delay: new Array(frames.length).fill(1000 / FPS) })
+  .webp({ lossless: true, effort: 6, loop: 0, delay: new Array(frames.length).fill(DELAY_MS) })
   .toBuffer();
 
 await mkdir(dirname(OUT), { recursive: true });
 await writeFile(OUT, bytes);
-console.log(`wrote ${OUT} (${(bytes.length / 1024 / 1024).toFixed(2)} MB, ${frames.length} frames @ ${FPS}fps)`);
+console.log(`wrote ${OUT} (${(bytes.length / 1024 / 1024).toFixed(2)} MB, ${frames.length} frames @ ${FPS.toFixed(1)}fps)`);
