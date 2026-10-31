@@ -16,7 +16,13 @@ import {
   eqLevels,
   marqueeOffset,
   pixelateIcon,
+  type RadioSkin,
 } from "./pixelRadio";
+
+export interface PixelSection {
+  id: string;
+  skin: RadioSkin;
+}
 import { loadYouTubeApi } from "./youtubeApi";
 
 const CREAM = "#f5f0e6";
@@ -52,11 +58,11 @@ interface Current {
 }
 
 /**
- * Sticky "now playing" radio locked to the shared Non-Stop-Pop schedule. Inside
- * the hero (`heroId`) it renders as pixel art; below it the same widget is
- * smooth, and the hero's bottom edge wipes between the two as you scroll.
+ * Sticky "now playing" radio locked to the shared Non-Stop-Pop schedule. Over a
+ * pixel section it renders as pixel art in that section's skin; elsewhere the
+ * same widget is smooth, and the section's edge wipes between the two as you scroll.
  */
-export default function FloatingRadio({ heroId }: { heroId: string }) {
+export default function FloatingRadio({ sections }: { sections: PixelSection[] }) {
   const [mounted, setMounted] = useState(false);
   const [p, setP] = useState(3);
   const [track, setTrack] = useState<number | null>(null);
@@ -67,6 +73,7 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
   const [volume, setVolume] = useState(DEFAULT_VOLUME);
   const [volOpen, setVolOpen] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [skin, setSkin] = useState<RadioSkin>("neon");
 
   const hostRef = useRef<HTMLDivElement>(null);
   const volRef = useRef<HTMLDivElement>(null);
@@ -140,8 +147,8 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
 
   useEffect(() => {
     const ctx = volCanvasRef.current?.getContext("2d");
-    if (ctx) drawPixelVolume(ctx, volume, dragging);
-  }, [volume, dragging, volOpen]);
+    if (ctx) drawPixelVolume(ctx, volume, dragging, skin);
+  }, [volume, dragging, volOpen, skin]);
 
   const volumeFromPointer = (clientY: number) => {
     const el = volRef.current;
@@ -311,29 +318,34 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
     if (!mounted) return;
     let raf = 0;
     let lastPixel = 0;
+    let lastSkin: RadioSkin = "neon";
     const frame = (now: number) => {
       const { p: px, muted: m, playing: pl, muteHover: mh } = live.current;
       const widget = widgetRef.current;
-      const hero = document.getElementById(heroId);
+      const els = sections.map((s) => document.getElementById(s.id));
       const height = RADIO_H * px;
-      let seam = 0;
-      if (widget && hero) {
-        const raw = hero.getBoundingClientRect().bottom - widget.getBoundingClientRect().top;
-        seam = Math.max(0, Math.min(height, Math.round(raw / px) * px));
+      const [a, b, hit] = widget ? pixelSpan(widget, height, els, px) : [0, 0, -1];
+      const pixelShown = b > a;
+      const smoothShown = b - a < height;
+      const sk = hit >= 0 ? sections[hit].skin : lastSkin;
+      if (sk !== lastSkin) {
+        lastSkin = sk;
+        lastPixel = 0;
+        setSkin(sk);
       }
       const vol = volRef.current;
-      if (vol && hero) {
+      if (vol) {
         const vh = VOL.h * px;
-        const raw = hero.getBoundingClientRect().bottom - vol.getBoundingClientRect().top;
-        const vs = Math.max(0, Math.min(vh, Math.round(raw / px) * px));
-        if (volPixelRef.current) volPixelRef.current.style.clipPath = `inset(0 0 ${vh - vs}px 0)`;
-        if (volSmoothRef.current) volSmoothRef.current.style.clipPath = `inset(${vs}px 0 0 0)`;
+        const [va, vb] = pixelSpan(vol, vh, els, px);
+        if (volPixelRef.current) volPixelRef.current.style.clipPath = `inset(${va}px 0 ${vh - vb}px 0)`;
+        if (volSmoothRef.current) volSmoothRef.current.style.clipPath = smoothClip(va, vb, vh);
       }
-      if (pixelRef.current) pixelRef.current.style.clipPath = `inset(0 0 ${height - seam}px 0)`;
-      if (smoothRef.current) smoothRef.current.style.clipPath = `inset(${seam}px 0 0 0)`;
+      if (pixelRef.current) pixelRef.current.style.clipPath = `inset(${a}px 0 ${height - b}px 0)`;
+      if (smoothRef.current) smoothRef.current.style.clipPath = smoothClip(a, b, height);
       if (seamRef.current) {
-        seamRef.current.style.transform = `translateY(${seam - px / 2}px)`;
-        seamRef.current.style.opacity = seam > 0 && seam < height ? "1" : "0";
+        const edge = a > 0 ? a : b;
+        seamRef.current.style.transform = `translateY(${edge - px / 2}px)`;
+        seamRef.current.style.opacity = pixelShown && smoothShown ? "1" : "0";
       }
 
       const cur = currentRef.current;
@@ -341,7 +353,7 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
       const audible = pl && !m;
       const progress = cur ? (radioNow() - cur.startMs) / 1000 / TRACKS[cur.track].duration : 0;
 
-      if (seam < height) {
+      if (smoothShown) {
         if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.max(0, Math.min(1, progress))})`;
         const mq = marqueeRef.current;
         if (mq) {
@@ -357,7 +369,7 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
       }
 
       const ctx = canvasRef.current?.getContext("2d");
-      if (ctx && seam > 0 && now - lastPixel >= 1000 / PIXEL_FPS) {
+      if (ctx && pixelShown && now - lastPixel >= 1000 / PIXEL_FPS) {
         lastPixel = now;
         drawPixelRadio(ctx, {
           t,
@@ -368,13 +380,13 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
           live: audible,
           muteHover: mh,
           icon: iconRef.current,
-        });
+        }, sk);
       }
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [mounted, heroId]);
+  }, [mounted, sections]);
 
   const title = track === null ? "" : TRACKS[track].title;
   const W = RADIO_W * p;
@@ -561,6 +573,26 @@ export default function FloatingRadio({ heroId }: { heroId: string }) {
       {mounted && createPortal(widget, document.body)}
     </>
   );
+}
+
+/** The [top, bottom) slice of `el`, snapped to whole pixels, that overlaps a pixel section, plus that section's index. */
+function pixelSpan(el: HTMLElement, height: number, sections: (HTMLElement | null)[], px: number): [number, number, number] {
+  const top = el.getBoundingClientRect().top;
+  const snap = (v: number) => Math.max(0, Math.min(height, Math.round(v / px) * px));
+  for (let i = 0; i < sections.length; i++) {
+    const s = sections[i];
+    if (!s) continue;
+    const r = s.getBoundingClientRect();
+    const a = snap(r.top - top);
+    const b = snap(r.bottom - top);
+    if (b > a) return [a, b, i];
+  }
+  return [0, 0, -1];
+}
+
+/** Clips the smooth skin to whatever the pixel slice leaves uncovered (one end or the other). */
+function smoothClip(a: number, b: number, height: number): string {
+  return a > 0 ? `inset(0 0 ${height - a}px 0)` : `inset(${b}px 0 0 0)`;
 }
 
 function SpeakerIcon({ muted, size }: { muted: boolean; size: number }) {

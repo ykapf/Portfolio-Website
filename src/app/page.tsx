@@ -1,8 +1,14 @@
 import Footer from "./components/Footer";
 import IntroLoader from "./components/IntroLoader";
+import PixelDesktop from "./components/pixel-desktop/PixelDesktop";
 import PixelHero from "./components/PixelHero";
-import FloatingRadio from "./components/radio/FloatingRadio";
+import FloatingRadio, { type PixelSection } from "./components/radio/FloatingRadio";
 import SiteFooter from "./components/SiteFooter";
+
+const PIXEL_SECTIONS: PixelSection[] = [
+  { id: "pixel-hero", skin: "neon" },
+  { id: "pixel-desktop", skin: "win95" },
+];
 
 export default function Home() {
   const links = [
@@ -23,7 +29,7 @@ export default function Home() {
       {/* Full-screen intro — pixel remake of outrun scene */}
       <IntroLoader />
       <PixelHero />
-      <FloatingRadio heroId="pixel-hero" />
+      <FloatingRadio sections={PIXEL_SECTIONS} />
 
       <div className="relative flex flex-col min-h-screen  text-[#f5f0e6]">
         {/* Vertical Grid Background */}
@@ -67,6 +73,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <PixelDesktop id="pixel-desktop" />
       <SiteFooter />
     </>
   );
