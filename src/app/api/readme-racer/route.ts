@@ -4,9 +4,11 @@ import { H, W } from "../../components/retro-racer/config";
 import { HudStats, HudStatus, drawHudStats, drawHudTicker, tickerLine } from "../../components/retro-racer/hud";
 import { REVALIDATE, loadGithubStats } from "../github-stats/stats";
 
-export const dynamic = "force-dynamic";
+// Encoding takes far longer than GitHub's image proxy will wait, so the card is built at deploy time and
+// regenerated in the background (ISR); requests always get the last finished copy instantly.
+export const revalidate = 600;
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 // Half a blink cycle; the 24s loop must be a whole number of cycles so the blink doesn't jump at the seam.
 const BLINK_HALF_MS = 600;
