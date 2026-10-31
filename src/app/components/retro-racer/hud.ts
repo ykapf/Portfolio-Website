@@ -114,23 +114,36 @@ const PLAYER_LABEL = "1P YKAPF";
 
 const num = (n: number | undefined) => (n === undefined ? "--" : String(n));
 
-function tickerText(stats: HudStats | null, status: HudStatus, blinkOn: boolean): string | null {
+/** The flashing line under the score, and whether it should blink. */
+export function tickerLine(stats: HudStats | null, status: HudStatus): { text: string; blinks: boolean } {
   const s = stats ?? undefined;
   const ticker =
     status === "offline" ? "OFFLINE" : status === "loading" ? "LOADING" : s && s.todayCount > 0 ? `TODAY +${s.todayCount}` : "INSERT COMMIT";
-  const blinks = status !== "ready" || !s || s.todayCount === 0;
+  return { text: ticker, blinks: status !== "ready" || !s || s.todayCount === 0 };
+}
+
+function tickerText(stats: HudStats | null, status: HudStatus, blinkOn: boolean): string | null {
+  const { text: ticker, blinks } = tickerLine(stats, status);
   return !blinks || blinkOn ? ticker : null;
+}
+
+/** Rev counter only; `bottom` is the lowest pixel row it may use. */
+export function drawRevDial(ctx: CanvasRenderingContext2D, left: number, bottom: number, revs: number) {
+  dial(ctx, left + DIAL_R + 2, bottom - DIAL_R - 2, revs);
+}
+
+/** "This week" readout that sits to the right of the rev counter. */
+function weekReadout(ctx: CanvasRenderingContext2D, left: number, bottom: number, s: HudStats | undefined) {
+  const tx = left + DIAL_R * 2 + 8;
+  text(ctx, "THIS WEEK", tx, bottom - 21, 1, CYAN);
+  const weekW = text(ctx, num(s?.lastWeek), tx, bottom - 10, 2, GOLD);
+  text(ctx, "COMMITS", tx + weekW + 4, bottom - GLYPH_H, 1, PINK);
 }
 
 /** Rev counter with "this week" beside it; `bottom` is the lowest pixel row it may use. */
 function revBlock(ctx: CanvasRenderingContext2D, left: number, bottom: number, revs: number, s: HudStats | undefined) {
-  const dcx = left + DIAL_R + 2;
-  const dcy = bottom - DIAL_R - 2;
-  dial(ctx, dcx, dcy, revs);
-  const tx = dcx + DIAL_R + 6;
-  text(ctx, "THIS WEEK", tx, bottom - 21, 1, CYAN);
-  const weekW = text(ctx, num(s?.lastWeek), tx, bottom - 10, 2, GOLD);
-  text(ctx, "COMMITS", tx + weekW + 4, bottom - GLYPH_H, 1, PINK);
+  drawRevDial(ctx, left, bottom, revs);
+  weekReadout(ctx, left, bottom, s);
 }
 
 /** Native height of the portrait stats panel that sits above the scene. */
@@ -187,6 +200,23 @@ export function drawHud(
   revs: number,
 ) {
   ctx.clearRect(0, 0, w, h);
+  drawHudStats(ctx, w, h, stats, tickerText(stats, status, blinkOn));
+  drawRevDial(ctx, MARGIN, h - MARGIN, revs);
+}
+
+/** Desktop ticker position, so the README card can draw it as its own blinking layer. */
+export function drawHudTicker(ctx: CanvasRenderingContext2D, w: number, ticker: string) {
+  text(ctx, ticker, Math.round(w / 2), MARGIN + 37, 1, GOLD, "center");
+}
+
+/** Every desktop HUD element except the rev counter; `ticker` is the line under the score, if shown. */
+export function drawHudStats(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  stats: HudStats | null,
+  ticker: string | null,
+) {
   const m = MARGIN;
   const s = stats ?? undefined;
 
@@ -201,8 +231,7 @@ export function drawHud(
   text(ctx, "SCORE", cx, m, 1, CYAN, "center");
   text(ctx, num(s?.lastYear), cx, m + 8, 3, GOLD, "center");
   text(ctx, "COMMITS IN 365 DAYS", cx, m + 27, 1, PINK, "center");
-  const ticker = tickerText(stats, status, blinkOn);
-  if (ticker) text(ctx, ticker, cx, m + 37, 1, GOLD, "center");
+  if (ticker) drawHudTicker(ctx, w, ticker);
 
   // Top right: the longest streak ever is the high score.
   const r = w - m;
@@ -211,6 +240,6 @@ export function drawHud(
   const daysW = text(ctx, "DAYS", r, m + 18 + GLYPH_H, 1, PINK, "right");
   text(ctx, num(s?.longestStreak), r - daysW - 4, m + 18, 2, GOLD, "right");
 
-  // Bottom left: the car's rev counter, with commits this week beside it.
-  revBlock(ctx, m, h - m, revs, s);
+  // Bottom left: commits this week, beside the car's rev counter.
+  weekReadout(ctx, m, h - m, s);
 }
